@@ -5,7 +5,7 @@
 
 /**
  *
- * @author ernest
+ * @author ernest y rodrigo
  */
 public class aplicacion_principal extends javax.swing.JFrame {
 
