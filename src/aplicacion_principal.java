@@ -67,7 +67,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(aplicacion_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        System.out.println(System.getProperty("user.dir"));
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -75,6 +75,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
