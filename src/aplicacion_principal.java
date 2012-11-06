@@ -1,3 +1,15 @@
+
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import javax.imageio.ImageIO;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,11 +21,13 @@
  */
 public class aplicacion_principal extends javax.swing.JFrame {
 
+    Collection<Imagen> colimage;
     /**
      * Creates new form aplicacion_principal
      */
     public aplicacion_principal() {
         initComponents();
+        inicializar();
     }
 
     /**
@@ -41,6 +55,31 @@ public class aplicacion_principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inicializar() {
+        this.colimage = new ArrayList<Imagen>();
+        try {
+            ZipEntry entry;
+            BufferedImage bi ;
+            try (ZipFile zipFile = new ZipFile("imagenes.zip")) {
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                while(entries.hasMoreElements()){ /* Mientras haya entradas */
+                    /* Y no sean directorios */
+                    entry = entries.nextElement();
+                    if(!entry.isDirectory()){
+                        System.out.println(entry.getName());
+                        bi = ImageIO.read(zipFile.getInputStream(entry));
+                        
+                        Imagen p = new Imagen(bi, entry.getName());
+                        //if (p == null){System.out.println("hhh");}
+                        this.colimage.add(p);  /* Añadimos el nuevo objeto imagen a la collection */                        
+                    }
+                    
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
     /**
      * @param args the command line arguments
      */
