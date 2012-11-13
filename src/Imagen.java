@@ -1,25 +1,32 @@
 
-import java.awt.Graphics;
+
 import java.awt.image.BufferedImage;
-import javax.swing.JPanel;
+import java.util.Comparator;
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+ * 
+ * gzipoutputstream
+ *  para comparar el grado de compresion hay que saltarse el proceso de compresion
+ * es decir, saltarse la compresion y pillar la coleection y aplicar jpeg+gzip
+ * 
+ * para la funcion hash que compara teselas, por ejemplo vale la suma de los valores
+ *rgb y dividir por el numero de pixeles
+ * 
+ * /
 
 /**
  *
  * @author Rodrigo Aguilera
  */
-public class Imagen {
+public class Imagen implements Comparable{
     private BufferedImage bi;
-    private String name;
+    private String filename;
     private int ancho;
     private int alto;
+    
     public Imagen(BufferedImage bi, String name){
         this.bi=bi;
-        this.name=name;
+        this.filename=name;        
     }
 
     /**
@@ -39,15 +46,15 @@ public class Imagen {
     /**
      * @return the name
      */
-    public String getName() {
-        return name;
+    public String getFilename() {
+        return filename;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setFilename(String name) {
+        this.filename = name;
     }
     
     /**
@@ -77,8 +84,13 @@ public class Imagen {
     public void setAlto(int alto) {
         this.alto = alto;
     }
-    public void draw(Graphics g) {       
-       g.drawImage(bi, getAncho(), getAlto(), null);
+
+    @Override
+    public int compareTo(Object t) {
+       Imagen im = (Imagen) t; 
+       return filename.compareTo(im.getFilename());
     }
+    
+    
 
 }
