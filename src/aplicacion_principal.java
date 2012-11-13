@@ -1,9 +1,9 @@
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 /*
  * To change this template, choose Tools | Templates
@@ -25,6 +24,7 @@ import javax.swing.ImageIcon;
 public class aplicacion_principal extends javax.swing.JFrame {
 
     Collection<Imagen> colimage;
+    Reproductor player;
     /**
      * Creates new form aplicacion_principal
      */
@@ -43,8 +43,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonPlay = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        videoPanel = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,43 +55,43 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        javax.swing.GroupLayout videoPanelLayout = new javax.swing.GroupLayout(videoPanel);
+        videoPanel.setLayout(videoPanelLayout);
+        videoPanelLayout.setHorizontalGroup(
+            videoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 320, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        videoPanelLayout.setVerticalGroup(
+            videoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 240, Short.MAX_VALUE)
         );
 
-        jLabel1.setText("jLabel1");
+        jButton1.setText("Stop");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonPlay))
-                .addContainerGap(217, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(92, 92, 92))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonPlay)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(jLabel1)
-                .addGap(38, 38, 38)
-                .addComponent(buttonPlay)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonPlay)
+                    .addComponent(jButton1))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         pack();
@@ -99,22 +99,21 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
     private void buttonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonPlayMouseClicked
         // TODO add your handling code here:
-        Iterator<Imagen> i= colimage.iterator();
-        while (i.hasNext()){
-            Imagen ima =i.next();
-            System.out.println("muestra "+ima.getName());
-            
-            
-            try {
-                ima.drawLabel(jLabel1);
-                jLabel1.validate();
-                jLabel1.repaint();
-                Thread.sleep(1000);
-                //jPanel1.repaint();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        this.player = new Reproductor(320,240);
+        int i=0;
+        BufferedImage[] video = new BufferedImage[colimage.size()];
+        Iterator<Imagen> it= colimage.iterator();
+        while (it.hasNext()){
+            Imagen ima =it.next();
+            System.out.println("muestra "+ima.getFilename());
+            video[i] = ima.getBi();
+            i++;
+           
         }
+        
+        player.setVideo(video);
+        videoPanel.add(player);
+        //jPanel1.removeAll();
     }//GEN-LAST:event_buttonPlayMouseClicked
 
        /**
@@ -155,12 +154,12 @@ public class aplicacion_principal extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonPlay;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel videoPanel;
     // End of variables declaration//GEN-END:variables
 
 private void inicializar() {
-        this.colimage = new ArrayList<>();
+        this.colimage = new ArrayList();
         try {
             ZipEntry entry;
             BufferedImage bi ;
@@ -184,7 +183,8 @@ private void inicializar() {
         } catch (IOException ex) {
             Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
         } 
-       
+        //Collections.sort(colimage,  new CompareFilename() );
+        //Collections.sort(colimage);
     }
 
  
