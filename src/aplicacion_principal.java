@@ -1,8 +1,8 @@
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 
 /*
  * To change this template, choose Tools | Templates
@@ -23,14 +24,14 @@ import javax.imageio.ImageIO;
  */
 public class aplicacion_principal extends javax.swing.JFrame {
 
-    Collection<Imagen> colimage;
+    ArrayList<Imagen> colimage;
     Reproductor player;
     /**
      * Creates new form aplicacion_principal
      */
     public aplicacion_principal() {
         initComponents();
-        inicializar();
+        //inicializar();
     }
 
     /**
@@ -44,9 +45,16 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
         buttonPlay = new javax.swing.JButton();
         videoPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        stopButton = new javax.swing.JButton();
+        menuPrincipal = new javax.swing.JMenuBar();
+        menuArchivo = new javax.swing.JMenu();
+        openZipButton = new javax.swing.JMenuItem();
+        closeButton = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuFiltroGris = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tecnologías multimedia");
 
         buttonPlay.setText("Play");
         buttonPlay.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -66,7 +74,41 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGap(0, 240, Short.MAX_VALUE)
         );
 
-        jButton1.setText("Stop");
+        stopButton.setText("Stop");
+
+        menuArchivo.setText("Archivo");
+
+        openZipButton.setText("Abrir Zip con imagenes");
+        openZipButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openZipButtonActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(openZipButton);
+
+        closeButton.setText("Cerrar aplicación");
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeButtonActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(closeButton);
+
+        menuPrincipal.add(menuArchivo);
+
+        jMenu2.setText("Editar");
+
+        menuFiltroGris.setText("Aplicar escala de grises");
+        menuFiltroGris.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFiltroGrisActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuFiltroGris);
+
+        menuPrincipal.add(jMenu2);
+
+        setJMenuBar(menuPrincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,7 +121,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buttonPlay)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(stopButton)))
                 .addContainerGap(151, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -87,11 +129,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonPlay)
-                    .addComponent(jButton1))
-                .addContainerGap(94, Short.MAX_VALUE))
+                    .addComponent(stopButton))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -105,7 +147,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
         Iterator<Imagen> it= colimage.iterator();
         while (it.hasNext()){
             Imagen ima =it.next();
-            System.out.println("muestra "+ima.getFilename());
             video[i] = ima.getBi();
             i++;
            
@@ -115,6 +156,69 @@ public class aplicacion_principal extends javax.swing.JFrame {
         videoPanel.add(player);
         //jPanel1.removeAll();
     }//GEN-LAST:event_buttonPlayMouseClicked
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void openZipButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openZipButtonActionPerformed
+        this.colimage = new ArrayList<>();
+        try {
+            ZipEntry entry;
+            BufferedImage bi ;
+            JFileChooser fc = new JFileChooser();
+            int returnVal;
+            returnVal = fc.showOpenDialog(menuArchivo);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                try (ZipFile zipFile = new ZipFile(file.getName())) {
+                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                    while(entries.hasMoreElements()){ /* Mientras haya entradas */
+                        /* Y no sean directorios */
+                        entry = entries.nextElement();
+                        if(!entry.isDirectory()){                            
+                            //leemos la entry y la convertimos en una bufferedimage
+                            bi = ImageIO.read(zipFile.getInputStream(entry));                       
+                            Imagen p = new Imagen(bi, entry.getName());
+                            System.out.println(entry.getName());
+                            this.colimage.add(p);  /* Añadimos el nuevo objeto imagen a la collection */                         
+                        }                    
+                    }
+                    zipFile.close();
+                }
+               
+                Collections.sort(this.colimage);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+       
+    }//GEN-LAST:event_openZipButtonActionPerformed
+
+    private void menuFiltroGrisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFiltroGrisActionPerformed
+        ArrayList<Imagen>  t_colimage=new ArrayList<>();
+        Iterator<Imagen> it= colimage.iterator();
+        while (it.hasNext()){            
+            Imagen ima =it.next();
+            BufferedImage bi = ima.getBi();
+            for (int i =0; i<bi.getWidth();i++){
+                for(int j=0;j<bi.getHeight();j++){  
+                    //System.out.println(ima.getFilename()+" : "+bi.getRGB(i,j));
+                    Color cl= new Color(bi.getRGB(i, j));
+                    //hacemos la media de los colores
+                    int grey = (cl.getRed() + cl.getGreen() + cl.getBlue())/3;
+                    cl = new Color(grey,grey,grey);
+                    bi.setRGB(i,j,cl.getRGB() );
+                    //bi.setRGB(0, 0, 0);
+                }
+            }
+            ima.setBi(bi);
+            t_colimage.add(ima);
+            
+        }
+        this.colimage=t_colimage;
+    }//GEN-LAST:event_menuFiltroGrisActionPerformed
 
        /**
      * @param args the command line arguments
@@ -132,17 +236,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(aplicacion_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(aplicacion_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(aplicacion_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(aplicacion_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        System.out.println(System.getProperty("user.dir"));
+       
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -154,38 +252,17 @@ public class aplicacion_principal extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonPlay;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JMenuItem closeButton;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenuItem menuFiltroGris;
+    private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JMenuItem openZipButton;
+    private javax.swing.JButton stopButton;
     private javax.swing.JPanel videoPanel;
     // End of variables declaration//GEN-END:variables
 
-private void inicializar() {
-        this.colimage = new ArrayList();
-        try {
-            ZipEntry entry;
-            BufferedImage bi ;
-            try (ZipFile zipFile = new ZipFile("imagenes.zip")) {
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                while(entries.hasMoreElements()){ /* Mientras haya entradas */
-                    /* Y no sean directorios */
-                    entry = entries.nextElement();
-                    if(!entry.isDirectory()){
-                        System.out.println(entry.getName());
-                        bi = ImageIO.read(zipFile.getInputStream(entry));
-                        
-                        Imagen p = new Imagen(bi, entry.getName());
-                        //if (p == null){System.out.println("hhh");}
-                        this.colimage.add(p);  /* Añadimos el nuevo objeto imagen a la collection */
-                         
-                    }
-                    
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        //Collections.sort(colimage,  new CompareFilename() );
-        //Collections.sort(colimage);
-    }
+//private void inicializar() {   }
 
  
 }
