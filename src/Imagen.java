@@ -1,5 +1,6 @@
 
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 /*
@@ -20,8 +21,7 @@ import java.awt.image.BufferedImage;
 public class Imagen implements Comparable{
     private BufferedImage bi;
     private String filename;
-    private int ancho;
-    private int alto;
+    private Dimension dim;
     
     public Imagen(BufferedImage bi, String name){
         this.bi=bi;
@@ -59,31 +59,7 @@ public class Imagen implements Comparable{
     /**
      * @return the ancho
      */
-    public int getAncho() {
-        return ancho;
-    }
-
-    /**
-     * @param ancho the ancho to set
-     */
-    public void setAncho(int ancho) {
-        this.ancho = ancho;
-    }
-
-    /**
-     * @return the alto
-     */
-    public int getAlto() {
-        return alto;
-    }
-
-    /**
-     * @param alto the alto to set
-     */
-    public void setAlto(int alto) {
-        this.alto = alto;
-    }
-
+   
     @Override
     public int compareTo(Object t) {
        Imagen im = (Imagen) t; 

@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -8,10 +9,13 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /*
  * To change this template, choose Tools | Templates
@@ -43,12 +47,15 @@ public class aplicacion_principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonPlay = new javax.swing.JButton();
+        playButton = new javax.swing.JButton();
         videoPanel = new javax.swing.JPanel();
         stopButton = new javax.swing.JButton();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         openZipButton = new javax.swing.JMenuItem();
+        openPtmButton = new javax.swing.JMenuItem();
+        savePtmButton = new javax.swing.JMenuItem();
+        closeVideoButton = new javax.swing.JMenuItem();
         closeButton = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuFiltroGris = new javax.swing.JMenuItem();
@@ -56,10 +63,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tecnologías multimedia");
 
-        buttonPlay.setText("Play");
-        buttonPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+        playButton.setText("Play");
+        playButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonPlayMouseClicked(evt);
+                playButtonMouseClicked(evt);
             }
         });
 
@@ -75,6 +82,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
         );
 
         stopButton.setText("Stop");
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtonActionPerformed(evt);
+            }
+        });
 
         menuArchivo.setText("Archivo");
 
@@ -85,6 +97,30 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
         menuArchivo.add(openZipButton);
+
+        openPtmButton.setText("Abrir Vídeo en formato ptm");
+        openPtmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openPtmButtonActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(openPtmButton);
+
+        savePtmButton.setText("Guardar Vídeo en formato ptm");
+        savePtmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                savePtmButtonActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(savePtmButton);
+
+        closeVideoButton.setText("Cerrar video");
+        closeVideoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeVideoButtonActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(closeVideoButton);
 
         closeButton.setText("Cerrar aplicación");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +155,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(buttonPlay)
+                        .addComponent(playButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stopButton)))
                 .addContainerGap(151, Short.MAX_VALUE))
@@ -131,7 +167,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonPlay)
+                    .addComponent(playButton)
                     .addComponent(stopButton))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
@@ -139,23 +175,40 @@ public class aplicacion_principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonPlayMouseClicked
-        // TODO add your handling code here:
-        this.player = new Reproductor(320,240);
-        int i=0;
-        BufferedImage[] video = new BufferedImage[colimage.size()];
-        Iterator<Imagen> it= colimage.iterator();
-        while (it.hasNext()){
-            Imagen ima =it.next();
-            video[i] = ima.getBi();
-            i++;
-           
+    private void playButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playButtonMouseClicked
+        if(this.player != null && this.player.isNoStopRequested()){
+            this.player.setNoStopRequested(false);
+            playButton.setText("Play"); 
         }
-        
-        player.setVideo(video);
-        videoPanel.add(player);
-        //jPanel1.removeAll();
-    }//GEN-LAST:event_buttonPlayMouseClicked
+        //que haya un video cargado
+        else if (colimage != null && colimage.size()>0){
+            BufferedImage bi = colimage.get(0).getBi();
+            Dimension d = new Dimension(bi.getWidth(),bi.getHeight());
+            //si todavia no tenemos reproductor o el que hay no tiene bien la dimension
+            if(this.player==null || !this.player.getDim().equals(d)){                
+                videoPanel.removeAll();     
+                this.player = new Reproductor(d);
+            }
+            if(this.player.getVideo() == null){
+                int i=0;
+                BufferedImage[] video = new BufferedImage[colimage.size()];
+                Iterator<Imagen> it= colimage.iterator();
+                while (it.hasNext()){
+                    Imagen ima =it.next();
+                    video[i] = ima.getBi();
+                    i++;
+
+                }
+                this.player.setVideo(video);
+                videoPanel.add(this.player);
+            }else{                
+                this.player.restart();
+            }  
+            playButton.setText("Pause"); 
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "No hay ningun video cargado");
+        }
+    }//GEN-LAST:event_playButtonMouseClicked
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         System.exit(0);
@@ -171,8 +224,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
             returnVal = fc.showOpenDialog(menuArchivo);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                try (ZipFile zipFile = new ZipFile(file.getName())) {
+                File file = fc.getSelectedFile(); 
+                try (ZipFile zipFile = new ZipFile(file.getAbsolutePath())) {
                     Enumeration<? extends ZipEntry> entries = zipFile.entries();
                     while(entries.hasMoreElements()){ /* Mientras haya entradas */
                         /* Y no sean directorios */
@@ -220,6 +273,103 @@ public class aplicacion_principal extends javax.swing.JFrame {
         this.colimage=t_colimage;
     }//GEN-LAST:event_menuFiltroGrisActionPerformed
 
+    private void closeVideoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeVideoButtonActionPerformed
+        videoPanel.removeAll();
+        colimage=null;
+        this.player=null;
+        videoPanel.repaint();
+        playButton.setText("Play");
+    }//GEN-LAST:event_closeVideoButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        videoPanel.removeAll();
+        this.player=null;
+        videoPanel.repaint();
+        playButton.setText("Play");
+    }//GEN-LAST:event_stopButtonActionPerformed
+
+    private void savePtmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePtmButtonActionPerformed
+        //abrimos el dialogo
+        final JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(menuArchivo);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {            
+            //BufferedOutputStream out = null;
+            try {
+                File file = fc.getSelectedFile();
+                
+                GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(file.getAbsolutePath()));
+                //ImageIO no entiende de separadores, por lo que los escribimos como objetos
+                ObjectOutputStream oos = new ObjectOutputStream(out);
+               
+                
+                //para indicar que viene descomprimido
+                oos.writeInt(colimage.size());
+                Iterator<Imagen> it= colimage.iterator();
+                while (it.hasNext()){            
+                    Imagen ima =it.next();
+                    BufferedImage bi = ima.getBi();
+                    
+                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                    ImageIO.write(bi, "jpeg", byteArray); 
+                    oos.writeObject(byteArray.toByteArray());
+                    byteArray.close();
+                }
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+                    
+            
+        } 
+
+
+    }//GEN-LAST:event_savePtmButtonActionPerformed
+
+    private void openPtmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openPtmButtonActionPerformed
+        this.colimage = new ArrayList<>();
+        try {
+            
+            BufferedImage bi ;
+            JFileChooser fc = new JFileChooser();
+            int returnVal;
+            returnVal = fc.showOpenDialog(menuArchivo);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                
+                //BufferedInputStream in;
+                GZIPInputStream in = new GZIPInputStream(new FileInputStream(file.getAbsolutePath()));                
+                ObjectInputStream ois = new ObjectInputStream(in); 
+                //int numframes = in.read();
+                int numframes=ois.readInt();
+                
+                
+                byte[] aux ;
+               
+                
+                for(int i = 0; i< numframes;i++){
+                    
+                    aux=(byte[])ois.readObject();
+                    ByteArrayInputStream ba = new ByteArrayInputStream(aux);
+                    bi = ImageIO.read(ba);
+                    Imagen p = new Imagen(bi, Integer.toString(i));
+                    this.colimage.add(p);                    
+                    ba.close();
+                }
+                
+                
+               
+                
+                
+               
+                in.close();               
+                
+            }   
+        }  catch (ClassNotFoundException | IOException  ex) {
+            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_openPtmButtonActionPerformed
+
        /**
      * @param args the command line arguments
      */
@@ -251,13 +401,16 @@ public class aplicacion_principal extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonPlay;
     private javax.swing.JMenuItem closeButton;
+    private javax.swing.JMenuItem closeVideoButton;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuFiltroGris;
     private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JMenuItem openPtmButton;
     private javax.swing.JMenuItem openZipButton;
+    private javax.swing.JButton playButton;
+    private javax.swing.JMenuItem savePtmButton;
     private javax.swing.JButton stopButton;
     private javax.swing.JPanel videoPanel;
     // End of variables declaration//GEN-END:variables

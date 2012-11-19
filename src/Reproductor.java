@@ -6,7 +6,7 @@ import javax.swing.JComponent;
 public class Reproductor extends JComponent {
   private BufferedImage[] video;
 
-  private Dimension mida;
+  private Dimension dim;
 
   private volatile int actual;
 
@@ -14,15 +14,15 @@ public class Reproductor extends JComponent {
 
   private volatile boolean noStopRequested;
 
-  public Reproductor(int ancho,int alto) {
+  public Reproductor(Dimension d) {
     actual = 0;
     
     //buildSlides();
-    mida = new Dimension(ancho, alto);
-    setMinimumSize(mida);
-    setPreferredSize(mida);
-    setMaximumSize(mida);
-    setSize(mida);
+    this.dim = d;
+    setMinimumSize(dim);
+    setPreferredSize(dim);
+    setMaximumSize(dim);
+    setSize(dim);
 
     noStopRequested = true;
     Runnable r = new Runnable() {
@@ -39,35 +39,97 @@ public class Reproductor extends JComponent {
 
     @Override
     public void paint(Graphics g) {
-      g.drawImage(video[actual], 0, 0, this);
+      g.drawImage(getVideo()[actual], 0, 0, this);
     }
 
-  private void play() {
-    while (noStopRequested) {
+  public void play() {
+    noStopRequested = true;
+    
+    while (isNoStopRequested()) {
       try {
-        Thread.sleep(100); // 10 frames per second
-        actual = (actual + 1) % video.length;
+        Thread.sleep(40); // 25 frames per second
+        actual = (actual + 1) % getVideo().length;
         repaint();
       } catch (InterruptedException x) {
         Thread.currentThread().interrupt();
       }
     }
   }
+  public void restart(){
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {           
+          play();           
+        }
+    };
+    internalThread = new Thread(r, "Video");
+    internalThread.start();
+}
 
   public void stopRequest() {
-    noStopRequested = false;
-    internalThread.interrupt();
+    setNoStopRequested(false);
+        getInternalThread().interrupt();   
   }
 
   public boolean isAlive() {
-    return internalThread.isAlive();
+    return getInternalThread().isAlive();
   }
+
+    
+    /**
+     * @return the dim
+     */
+    public Dimension getDim() {
+        return dim;
+    }
+
+    /**
+     * @param dim the dim to set
+     */
+    public void setDim(Dimension dim) {
+        this.dim = dim;
+    }
+
+    /**
+     * @return the video
+     */
+    public BufferedImage[] getVideo() {
+        return video;
+    }
 
     /**
      * @param video the video to set
      */
     public void setVideo(BufferedImage[] video) {
         this.video = video;
+    }
+
+    /**
+     * @param noStopRequested the noStopRequested to set
+     */
+    public void setNoStopRequested(boolean noStopRequested) {
+        this.noStopRequested = noStopRequested;
+    }
+
+    /**
+     * @return the internalThread
+     */
+    public Thread getInternalThread() {
+        return internalThread;
+    }
+
+    /**
+     * @param internalThread the internalThread to set
+     */
+    public void setInternalThread(Thread internalThread) {
+        this.internalThread = internalThread;
+    }
+
+    /**
+     * @return the noStopRequested
+     */
+    public boolean isNoStopRequested() {
+        return noStopRequested;
     }
 
  
