@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 public class Imagen implements Comparable{
     private BufferedImage bi;
     private String filename;
-    private Dimension dim;
     
     public Imagen(BufferedImage bi, String name){
         this.bi=bi;
