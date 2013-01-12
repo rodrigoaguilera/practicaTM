@@ -17,14 +17,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author ernest y rodrigo
+ * @author Rodrigo Aguilera
+ * @author Ernest Pastor
+ * 
  */
 public class aplicacion_principal extends javax.swing.JFrame {
 
@@ -240,7 +237,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     }
                     zipFile.close();
                 }
-               
+                //ordenamos la colección
                 Collections.sort(this.colimage);
             }
         } catch (IOException ex) {
@@ -294,80 +291,23 @@ public class aplicacion_principal extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(menuArchivo);
         if (returnVal == JFileChooser.APPROVE_OPTION) {            
             //BufferedOutputStream out = null;
-            try {
-                File file = fc.getSelectedFile();
-                
-                GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(file.getAbsolutePath()));
-                //ImageIO no entiende de separadores, por lo que los escribimos como objetos
-                ObjectOutputStream oos = new ObjectOutputStream(out);
-               
-                
-                //para indicar que viene descomprimido
-                oos.writeInt(colimage.size());
-                Iterator<Imagen> it= colimage.iterator();
-                while (it.hasNext()){            
-                    Imagen ima =it.next();
-                    BufferedImage bi = ima.getBi();
-                    
-                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                    ImageIO.write(bi, "jpeg", byteArray); 
-                    oos.writeObject(byteArray.toByteArray());
-                    byteArray.close();
-                }
-                out.close();
-            } catch (IOException ex) {
-                Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-                    
-            
+            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);            
+                              
         } 
 
 
     }//GEN-LAST:event_savePtmButtonActionPerformed
 
     private void openPtmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openPtmButtonActionPerformed
-        this.colimage = new ArrayList<>();
-        try {
+        JFileChooser fc = new JFileChooser();
+        int returnVal;
+        returnVal = fc.showOpenDialog(menuArchivo);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            this.colimage = Codec.loadPTM(fc.getSelectedFile().getAbsolutePath());
+               
             
-            BufferedImage bi ;
-            JFileChooser fc = new JFileChooser();
-            int returnVal;
-            returnVal = fc.showOpenDialog(menuArchivo);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                
-                //BufferedInputStream in;
-                GZIPInputStream in = new GZIPInputStream(new FileInputStream(file.getAbsolutePath()));                
-                ObjectInputStream ois = new ObjectInputStream(in); 
-                //int numframes = in.read();
-                int numframes=ois.readInt();
-                
-                
-                byte[] aux ;
-               
-                
-                for(int i = 0; i< numframes;i++){
-                    
-                    aux=(byte[])ois.readObject();
-                    ByteArrayInputStream ba = new ByteArrayInputStream(aux);
-                    bi = ImageIO.read(ba);
-                    Imagen p = new Imagen(bi, Integer.toString(i));
-                    this.colimage.add(p);                    
-                    ba.close();
-                }
-                
-                
-               
-                
-                
-               
-                in.close();               
-                
-            }   
-        }  catch (ClassNotFoundException | IOException  ex) {
-            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_openPtmButtonActionPerformed
 
        /**

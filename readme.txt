@@ -1,5 +1,8 @@
 Caracteristicas implementadas
 
+Ernest Pastor
+Rodrigo Aguilera
+
 
 -Es capaz de leer los ficheros zip con imagenes y guardar lo 
 leido en un fichero denominado ptm que consiste en un flujo de jpgs 
