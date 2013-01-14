@@ -47,6 +47,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
         playButton = new javax.swing.JButton();
         videoPanel = new javax.swing.JPanel();
         stopButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         openZipButton = new javax.swing.JMenuItem();
@@ -84,6 +86,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 stopButtonActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Parametros del codec");
+
+        jCheckBox1.setText("Estimación de movimiento");
 
         menuArchivo.setText("Archivo");
 
@@ -154,8 +160,12 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(playButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton)))
-                .addContainerGap(151, Short.MAX_VALUE))
+                        .addComponent(stopButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox1)
+                            .addComponent(jLabel1))))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,8 +175,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playButton)
-                    .addComponent(stopButton))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addComponent(stopButton)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         pack();
@@ -343,6 +356,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem closeButton;
     private javax.swing.JMenuItem closeVideoButton;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuFiltroGris;
