@@ -302,9 +302,27 @@ public class aplicacion_principal extends javax.swing.JFrame {
         //abrimos el dialogo
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(menuArchivo);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {            
+        if (returnVal == JFileChooser.APPROVE_OPTION) {   
             //BufferedOutputStream out = null;
-            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);            
+            try {
+                int opt = opcio();
+                if(opt==1){
+                    System.out.println("Guardamos en formato PTM CON compresion");
+                    long startTimeC = System.nanoTime();
+                    Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);
+                    long estimatedTimeC = System.nanoTime() - startTimeC;
+                    System.out.println("Tiempo guardando CON compresion: "+estimatedTimeC);
+                }
+                else{
+                    long startTimeD = System.nanoTime();
+                    System.out.println("Guardamos en formato PTM SIN compresion");
+                    Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,false);
+                    long estimatedTimeD = System.nanoTime() - startTimeD;
+                    System.out.println("Tiempo guardando SIN compresion: "+estimatedTimeD);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
                               
         } 
 
@@ -323,6 +341,15 @@ public class aplicacion_principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_openPtmButtonActionPerformed
 
+    private int opcio() throws IOException{
+        BufferedReader lectura = new BufferedReader(new InputStreamReader(System.in));
+        String llegir;
+        System.out.println("Pulsa 1 para guardar -> CON compresion, Otro numero -> SIN compresion");
+        llegir = lectura.readLine();
+        int opcio = Integer.parseInt(llegir);
+        return opcio;
+    }
+    
        /**
      * @param args the command line arguments
      */
