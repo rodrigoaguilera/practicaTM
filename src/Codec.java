@@ -34,6 +34,7 @@ public class Codec {
                 
                 //para indicar cuantas imagenes vienen
                 oos.writeInt(colimage.size());
+                oos.writeBoolean(motion);
                 
                 BufferedImage motionRef=null;
                 BufferedImage motionPrev=null;
@@ -49,10 +50,10 @@ public class Codec {
                             motionPrev=bi;
                         }else{
                             t_bi = bi;
-                            bi=motionDiff(bi,motionPrev);
+                            bi=motionDiff(bi,motionPrev,false);
                             motionPrev = t_bi;
                         }
-                    }
+                    }                   
                     ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                     ImageIO.write(bi, "jpeg", byteArray); 
                     oos.writeObject(byteArray.toByteArray());
@@ -68,18 +69,29 @@ public class Codec {
         try {
             
             BufferedImage bi ;
-            //BufferedInputStream in;
+            
             GZIPInputStream in = new GZIPInputStream(new FileInputStream(path));                
             ObjectInputStream ois = new ObjectInputStream(in); 
-            //int numframes = in.read();
-            int numframes=ois.readInt();
             
+            BufferedImage motionPrev=null;
+            
+            int numframes=ois.readInt();
+            boolean motion = ois.readBoolean();
             
             byte[] aux ;
             for(int i = 0; i< numframes;i++){
                 aux=(byte[])ois.readObject();
                 ByteArrayInputStream ba = new ByteArrayInputStream(aux);
                 bi = ImageIO.read(ba);
+                //System.out.println(i);
+                if (motion){
+                    if(i==0){
+                        motionPrev = bi;
+                    }else{
+                        //bi = motionDiff(bi,motionPrev,true);
+                        motionPrev = bi;
+                    }
+                }
                 Imagen p = new Imagen(bi, Integer.toString(i));
                 colimage.add(p);                    
                 ba.close();
@@ -90,29 +102,55 @@ public class Codec {
         }
         return colimage;
     }
-    private static BufferedImage motionDiff(BufferedImage b1,BufferedImage b2){
+    private static BufferedImage motionDiff(BufferedImage b1,BufferedImage b2, boolean sum){
         BufferedImage diffbi;
         diffbi = new BufferedImage(b1.getWidth(),b1.getHeight(),b1.getType());
         for (int i =0; i<b1.getWidth();i++){
             for(int j=0;j<b1.getHeight();j++){
                 Color c1= new Color(b1.getRGB(i, j));
                 Color c2= new Color(b2.getRGB(i, j));
-                
-                //hacemos un shift para eliminar el bit menos significativo
-                int red = shift(c1.getRed()-c2.getRed());
-                
-                int green = shift(c1.getGreen()-c2.getGreen());
-                
-                int blue = shift(c1.getBlue()-c2.getBlue());
-                
-                
-                c1 = new Color(red,green,blue);
-                diffbi.setRGB(i,j,c1.getRGB());                
+                int red;              
+                int green;                
+                int blue;
+                if(sum){
+                    red = c2.getRed()+ unshift(c1.getRed());                
+                    green = c2.getGreen() + unshift(c1.getGreen());                
+                    blue = c2.getBlue() + unshift(c1.getBlue());
+                    if (red >255 || red<0){
+                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
+                        System.out.println(red);
+                        red=0;
+                    }
+                    if (green >255 || green<0){
+                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
+                        System.out.println(green);
+                        green=0;
+                    }
+                    if (blue >255 || blue<0){
+                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
+                        System.out.println(blue);
+                        blue=0;
+                    }
+                    
+                }else{                
+                    //hacemos un shift para eliminar el bit menos significativo
+                    red = shift(c1.getRed()-c2.getRed());                
+                    green = shift(c1.getGreen()-c2.getGreen());                
+                    blue = shift(c1.getBlue()-c2.getBlue());
+                    if (i==0 && j ==9 ){
+                        System.out.println(c1.getBlue()+" - "+c2.getBlue() +" shift: "+shift(c1.getBlue()-c2.getBlue()));
+                        System.out.println("joder antes de guardar el azul:"+blue);
+                    } 
+                }                
+                diffbi.setRGB(i,j, new Color(red,green,blue).getRGB());             
             }
-        }
+        }        
         return diffbi;
     }
-    private static int shift(int red){
-        return (red<0)?(((red*-1)>>1)+1)<<1:(red>>1)<<1;
+    private static int shift(int color){
+        return (color<0)?(((color*-1)>>1)<<1)+1:(color>>1)<<1;
+    }
+    private static int unshift(int color){
+        return (color%2==0)?color:((color-1)*-1);
     }
 }
