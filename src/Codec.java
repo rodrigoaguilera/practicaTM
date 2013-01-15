@@ -44,7 +44,7 @@ public class Codec {
                 for (int i=0;it.hasNext();i++){            
                     Imagen ima =it.next();
                     BufferedImage bi = ima.getBi();
-                    if(motion){
+                    /*if(motion){
                         if(i==0){
                             motionRef=bi;
                             motionPrev=bi;
@@ -53,7 +53,19 @@ public class Codec {
                             bi=motionDiff(bi,motionPrev,false);
                             motionPrev = t_bi;
                         }
-                    }                   
+                    } */
+                    if(motion){
+                        if(i==0){
+                            motionRef=bi;
+                        }else{
+                            t_bi = bi;
+                            int tam_tesela=8;
+                            int num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);                            
+                            int[] vm_x = new int[num_teselas];
+                            int[] vm_y = new int[num_teselas];
+                            bi=motionEstim(bi,motionPrev,tam_tesela,num_teselas,vm_x,vm_y);
+                        }
+                    }
                     ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                     ImageIO.write(bi, "jpeg", byteArray); 
                     oos.writeObject(byteArray.toByteArray());
@@ -83,7 +95,7 @@ public class Codec {
                 aux=(byte[])ois.readObject();
                 ByteArrayInputStream ba = new ByteArrayInputStream(aux);
                 bi = ImageIO.read(ba);
-                //System.out.println(i);
+                
                 if (motion){
                     if(i==0){
                         motionPrev = bi;
@@ -116,31 +128,14 @@ public class Codec {
                     red = c2.getRed()+ unshift(c1.getRed());                
                     green = c2.getGreen() + unshift(c1.getGreen());                
                     blue = c2.getBlue() + unshift(c1.getBlue());
-                    if (red >255 || red<0){
-                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
-                        System.out.println(red);
-                        red=0;
-                    }
-                    if (green >255 || green<0){
-                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
-                        System.out.println(green);
-                        green=0;
-                    }
-                    if (blue >255 || blue<0){
-                        //System.out.println(c2.getBlue() +" + "+unshift(c1.getBlue()) +" -"+i+"-"+j);
-                        System.out.println(blue);
-                        blue=0;
-                    }
+                    
                     
                 }else{                
                     //hacemos un shift para eliminar el bit menos significativo
                     red = shift(c1.getRed()-c2.getRed());                
                     green = shift(c1.getGreen()-c2.getGreen());                
                     blue = shift(c1.getBlue()-c2.getBlue());
-                    if (i==0 && j ==9 ){
-                        System.out.println(c1.getBlue()+" - "+c2.getBlue() +" shift: "+shift(c1.getBlue()-c2.getBlue()));
-                        System.out.println("joder antes de guardar el azul:"+blue);
-                    } 
+                    
                 }                
                 diffbi.setRGB(i,j, new Color(red,green,blue).getRGB());             
             }
@@ -152,5 +147,30 @@ public class Codec {
     }
     private static int unshift(int color){
         return (color%2==0)?color:((color-1)*-1);
+    }
+
+    private static BufferedImage motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, int[] vm_x, int[] vm_y) {
+        BufferedImage newbi;
+        newbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
+        
+        for (int i=0;i<num_teselas;i++){
+            int iniX = (i%(bi.getWidth()/tam_tesela))*tam_tesela;
+            int iniY = (int)Math.floor(i/(bi.getHeight()/tam_tesela))*tam_tesela;
+            int[] tesela=bi.getRGB(iniX,iniY, tam_tesela, tam_tesela, null, 0, 0);
+            vm_x[i]=-1;
+            if(searchTes(bi,tesela,vm_x,vm_y,i)){
+                //poner a negro
+            }else{
+               //poner tesela
+            }
+            
+        }
+        return newbi;
+    }
+
+    private static boolean searchTes(BufferedImage bi, int[] tesela, int[] vm_x, int[] vm_y, int i) {
+        // limitar busqueda
+        
+        return true;
     }
 }
