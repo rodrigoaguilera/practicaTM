@@ -303,8 +303,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(menuArchivo);
         if (returnVal == JFileChooser.APPROVE_OPTION) {   
-            //BufferedOutputStream out = null;
-            try {
+            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,false);
+            /*try {
                 int opt = opcio();
                 if(opt==1){
                     System.out.println("Guardamos en formato PTM CON compresion");
@@ -322,7 +322,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 }
             } catch (IOException ex) {
                 Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
                               
         } 
 
