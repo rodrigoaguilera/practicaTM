@@ -4,16 +4,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -27,6 +18,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
     ArrayList<Imagen> colimage;
     Reproductor player;
+    
+    boolean DEBUG = false;
     /**
      * Creates new form aplicacion_principal
      */
@@ -241,38 +234,19 @@ public class aplicacion_principal extends javax.swing.JFrame {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void openZipButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openZipButtonActionPerformed
-        this.colimage = new ArrayList<>();
-        try {
-            ZipEntry entry;
-            BufferedImage bi ;
+        if(DEBUG){
+            this.colimage = Codec.openZip("/home/marinero/imagenes.zip");
+        }else{
             JFileChooser fc = new JFileChooser();
             int returnVal;
             returnVal = fc.showOpenDialog(menuArchivo);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile(); 
-                try (ZipFile zipFile = new ZipFile(file.getAbsolutePath())) {
-                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                    while(entries.hasMoreElements()){ /* Mientras haya entradas */
-                        /* Y no sean directorios */
-                        entry = entries.nextElement();
-                        if(!entry.isDirectory()){                            
-                            //leemos la entry y la convertimos en una bufferedimage
-                            bi = ImageIO.read(zipFile.getInputStream(entry));                       
-                            Imagen p = new Imagen(bi, entry.getName());
-                            System.out.println(entry.getName());
-                            this.colimage.add(p);  /* Añadimos el nuevo objeto imagen a la collection */                         
-                        }                    
-                    }
-                    zipFile.close();
-                }
-                //ordenamos la colección
-                Collections.sort(this.colimage);
+                this.colimage = Codec.openZip(fc.getSelectedFile().getAbsolutePath());
+
             }
-        } catch (IOException ex) {
-            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-        } 
        
+        }
     }//GEN-LAST:event_openZipButtonActionPerformed
 
     private void menuFiltroGrisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFiltroGrisActionPerformed
@@ -318,8 +292,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
         //abrimos el dialogo
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(menuArchivo);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {   
-            //BufferedOutputStream out = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);
+            /*
             try {
                 int opt = opcio();
                 if(opt==1){
@@ -338,7 +313,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 }
             } catch (IOException ex) {
                 Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
                               
         } 
 

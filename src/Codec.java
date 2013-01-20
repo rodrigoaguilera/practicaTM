@@ -9,11 +9,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
 
 
@@ -31,14 +35,17 @@ public class Codec {
                 //ImageIO no entiende de separadores, por lo que los escribimos como objetos
                 ObjectOutputStream oos = new ObjectOutputStream(out);
                
-                
+                int tam_tesela=8;
                 //para indicar cuantas imagenes vienen
                 oos.writeInt(colimage.size());
                 oos.writeBoolean(motion);
+                if (motion){
+                    oos.writeInt(tam_tesela);
+                }
                 
                 BufferedImage motionRef=null;
-                BufferedImage motionPrev=null;
-                BufferedImage t_bi=null;
+
+
                 
                 Iterator<Imagen> it= colimage.iterator();
                 for (int i=0;it.hasNext();i++){            
@@ -57,20 +64,32 @@ public class Codec {
                     if(motion){
                         if(i==0){
                             motionRef=bi;
+                            
+                            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                            ImageIO.write(bi, "jpeg", byteArray); 
+                            oos.writeObject(byteArray.toByteArray());
+                            byteArray.close();
                         }else{
-                            t_bi = bi;
-                            int tam_tesela=8;
+                            
+                            
                             int num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);                            
-                            int[] vm_x = new int[num_teselas];
-                            int[] vm_y = new int[num_teselas];
-                            bi=motionEstim(bi,motionPrev,tam_tesela,num_teselas,vm_x,vm_y);
+                            byte[] vm_x = new byte[num_teselas];
+                            byte[] vm_y = new byte[num_teselas];
+                            motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y);
+                            
+                            oos.write(vm_x);
+                            oos.write(vm_y);
+                            motionRef=bi;
                         }
+                    }else{
+                        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                        ImageIO.write(bi, "jpeg", byteArray); 
+                        oos.writeObject(byteArray.toByteArray());
+                        byteArray.close();
                     }
-                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                    ImageIO.write(bi, "jpeg", byteArray); 
-                    oos.writeObject(byteArray.toByteArray());
-                    byteArray.close();
+                    
                 }
+                oos.close();
                 out.close();
             } catch (IOException ex) {
                 Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,12 +108,40 @@ public class Codec {
             
             int numframes=ois.readInt();
             boolean motion = ois.readBoolean();
+            int tam_tesela=0;
+            if (motion){
+               tam_tesela=ois.readInt(); 
+            }
+            int num_teselas=0;
             
             byte[] aux ;
             for(int i = 0; i< numframes;i++){
-                aux=(byte[])ois.readObject();
-                ByteArrayInputStream ba = new ByteArrayInputStream(aux);
-                bi = ImageIO.read(ba);
+                if(motion){
+                   if(i==0){
+                        aux=(byte[])ois.readObject();
+                        ByteArrayInputStream ba = new ByteArrayInputStream(aux);
+                        bi = ImageIO.read(ba);
+                        ba.close();
+                        motionPrev = bi;
+                        num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);
+                   }else{
+                       byte[] vm_x = null;
+                       byte[] vm_y = null;
+                       ois.read(vm_x, 0, num_teselas);
+                       ois.read(vm_y, 0, num_teselas);
+                       bi = new BufferedImage(motionPrev.getWidth(),motionPrev.getHeight(),motionPrev.getType());
+                       for (int j = 0; j<num_teselas;j++){
+                           
+                       }
+                   }
+                }else{
+                    aux=(byte[])ois.readObject();
+                    ByteArrayInputStream ba = new ByteArrayInputStream(aux);
+                    bi = ImageIO.read(ba);
+                    ba.close();
+                }
+                
+                
                 
                 if (motion){
                     if(i==0){
@@ -106,7 +153,7 @@ public class Codec {
                 }
                 Imagen p = new Imagen(bi, Integer.toString(i));
                 colimage.add(p);                    
-                ba.close();
+                
             }
             in.close(); 
         }  catch (ClassNotFoundException | IOException  ex) {
@@ -149,28 +196,92 @@ public class Codec {
         return (color%2==0)?color:((color-1)*-1);
     }
 
-    private static BufferedImage motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, int[] vm_x, int[] vm_y) {
+    private static void motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y) {
         BufferedImage newbi;
         newbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
-        
+        System.out.println("num teselas: "+num_teselas);
         for (int i=0;i<num_teselas;i++){
             int iniX = (i%(bi.getWidth()/tam_tesela))*tam_tesela;
-            int iniY = (int)Math.floor(i/(bi.getHeight()/tam_tesela))*tam_tesela;
-            int[] tesela=bi.getRGB(iniX,iniY, tam_tesela, tam_tesela, null, 0, 0);
-            vm_x[i]=-1;
-            if(searchTes(bi,tesela,vm_x,vm_y,i)){
+            int iniY = (int)Math.floor(i/(bi.getWidth()/tam_tesela))*tam_tesela;
+            
+            System.out.println("i: "+i+" iniX: "+iniX +" iniy: "+iniY);
+            int spiral_limit=1;
+            int [] candidatos_diff;
+            candidatos_diff = new int[spiral_limit];
+            int[] candidatosX = new int[spiral_limit];
+            int[] candidatosY = new int[spiral_limit];
+            //saca tesela
+            int[] tesela = new int[tam_tesela*tam_tesela];
+            for(int j = 0; j< tam_tesela*tam_tesela;j++){
+                tesela[j]=bi.getRGB(iniX +(j%tam_tesela), iniY+((int)Math.floor(j/tam_tesela)));
+            }
+            
+            for(int j = 0;j<spiral_limit;j++){
+                //codigo espiral
+                int spiralX = 0;
+                int spiralY = 0;
+                
+                int iniXref = iniX + spiralX;
+                int iniYref = iniY + spiralY;
+                //saca tesela referencia
+                int[] teselaref = new int[tam_tesela*tam_tesela];
+                for(int k = 0; k< tam_tesela*tam_tesela;k++){
+                    teselaref[k]=motionPrev.getRGB(iniXref +(k%tam_tesela), iniYref+((int)Math.floor(k/tam_tesela)));
+                }
+                //rellena diferencia con tesela actual
+                int sum =0;
+                
+                candidatos_diff[j]=sum;
+                candidatosX[j] = spiralX;
+                candidatosY[j] = spiralY;
+            }
+            //devolver posicion del menor candidato
+            int pos=0;
+            for(int j = 1;j <candidatos_diff.length; j++){
+                if(candidatos_diff[j]<candidatos_diff[pos]){
+                    pos=j;
+                }    
+            }
+            vm_x[i] = (byte) candidatosX[pos];
+            vm_y[i] = (byte) candidatosY[pos];
+            //int[] tesela=bi.getRGB(iniX,iniY, tam_tesela, tam_tesela, null, 0, 0);
+            //vm_x[i]=-1;
+            /*if(searchTes(bi,tesela,vm_x,vm_y,i)){
                 //poner a negro
             }else{
                //poner tesela
-            }
+            }*/
             
         }
-        return newbi;
     }
 
-    private static boolean searchTes(BufferedImage bi, int[] tesela, int[] vm_x, int[] vm_y, int i) {
-        // limitar busqueda
-        
-        return true;
+    
+
+    static ArrayList<Imagen> openZip(String path) {
+        ArrayList<Imagen> colimage = new ArrayList<>();
+        ZipEntry entry;
+        try {
+        try (ZipFile zipFile = new ZipFile(path)) {
+                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                    while(entries.hasMoreElements()){ /* Mientras haya entradas */
+                        /* Y no sean directorios */
+                        entry = entries.nextElement();
+                        BufferedImage bi ;
+                        if(!entry.isDirectory()){                            
+                            //leemos la entry y la convertimos en una bufferedimage
+                            bi = ImageIO.read(zipFile.getInputStream(entry));                       
+                            Imagen p = new Imagen(bi, entry.getName());
+                            System.out.println(entry.getName());
+                            colimage.add(p);  /* Añadimos el nuevo objeto imagen a la collection */                         
+                        }                    
+                    }
+                    zipFile.close();
+                }
+                //ordenamos la colección
+                Collections.sort(colimage);
+          } catch (IOException ex) {
+            Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return colimage;
     }
 }
