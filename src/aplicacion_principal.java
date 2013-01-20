@@ -47,8 +47,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
         playButton = new javax.swing.JButton();
         videoPanel = new javax.swing.JPanel();
         stopButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         openZipButton = new javax.swing.JMenuItem();
@@ -58,6 +56,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
         closeButton = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuFiltroGris = new javax.swing.JMenuItem();
+        Threshold = new javax.swing.JMenuItem();
+        InvertirColores = new javax.swing.JMenuItem();
+        RGBAdjust50 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tecnologías multimedia");
@@ -86,10 +87,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 stopButtonActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("Parametros del codec");
-
-        jCheckBox1.setText("Estimación de movimiento");
 
         menuArchivo.setText("Archivo");
 
@@ -145,6 +142,32 @@ public class aplicacion_principal extends javax.swing.JFrame {
         });
         jMenu2.add(menuFiltroGris);
 
+        Threshold.setText("Threshold");
+        Threshold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ThresholdActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Threshold);
+
+        InvertirColores.setText("Invertir Colores");
+        InvertirColores.setAutoscrolls(true);
+        InvertirColores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InvertirColoresActionPerformed(evt);
+            }
+        });
+        jMenu2.add(InvertirColores);
+
+        RGBAdjust50.setText("RGB Ajuste +50");
+        RGBAdjust50.setAutoscrolls(true);
+        RGBAdjust50.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RGBAdjust50ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(RGBAdjust50);
+
         menuPrincipal.add(jMenu2);
 
         setJMenuBar(menuPrincipal);
@@ -160,12 +183,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(playButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jLabel1))))
-                .addContainerGap(157, Short.MAX_VALUE))
+                        .addComponent(stopButton)))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,11 +194,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playButton)
-                    .addComponent(stopButton)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
-                .addContainerGap(67, Short.MAX_VALUE))
+                    .addComponent(stopButton))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         pack();
@@ -303,8 +319,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(menuArchivo);
         if (returnVal == JFileChooser.APPROVE_OPTION) {   
-            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,false);
-            /*try {
+            //BufferedOutputStream out = null;
+            try {
                 int opt = opcio();
                 if(opt==1){
                     System.out.println("Guardamos en formato PTM CON compresion");
@@ -322,7 +338,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 }
             } catch (IOException ex) {
                 Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+            }
                               
         } 
 
@@ -340,6 +356,94 @@ public class aplicacion_principal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_openPtmButtonActionPerformed
+
+    private void ThresholdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThresholdActionPerformed
+        ArrayList<Imagen>  t_colimage=new ArrayList<>();
+        Iterator<Imagen> it= colimage.iterator();
+        while (it.hasNext()){            
+            Imagen ima =it.next();
+            BufferedImage bi = ima.getBi();
+            for (int i =0; i<bi.getWidth();i++){
+                for(int j=0;j<bi.getHeight();j++){  
+                    Color cl= new Color(bi.getRGB(i, j));
+                    //pasamos el threshold. lo mas bajo lo mandamos a blanco y lo mas alto a negro
+                    int barrera = 100;
+                    int thres = (cl.getRed() + cl.getGreen() + cl.getBlue())/3;
+                    if(thres>=barrera){
+                        thres = 255;
+                    }
+                    else
+                        thres = 0;
+                    cl = new Color(thres,thres,thres);
+                    bi.setRGB(i,j,cl.getRGB() );
+                }
+            }
+            ima.setBi(bi);
+            t_colimage.add(ima);
+            
+        }
+        this.colimage=t_colimage;
+    }//GEN-LAST:event_ThresholdActionPerformed
+
+    private void InvertirColoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InvertirColoresActionPerformed
+        ArrayList<Imagen>  t_colimage=new ArrayList<>();
+        Iterator<Imagen> it= colimage.iterator();
+        while (it.hasNext()){            
+            Imagen ima =it.next();
+            BufferedImage bi = ima.getBi();
+            for (int i =0; i<bi.getWidth();i++){
+                for(int j=0;j<bi.getHeight();j++){  
+                    Color cl= new Color(bi.getRGB(i, j));
+                    //invertimos los colores de cada componente
+                    int red = 255 - cl.getRed();
+                    int green = 255 - cl.getGreen();
+                    int blue = 255 - cl.getBlue();
+                    cl = new Color(red,green,blue);
+                    bi.setRGB(i,j,cl.getRGB() );
+                }
+            }
+            ima.setBi(bi);
+            t_colimage.add(ima);
+            
+        }
+        this.colimage=t_colimage;
+    }//GEN-LAST:event_InvertirColoresActionPerformed
+
+    private void RGBAdjust50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RGBAdjust50ActionPerformed
+        ArrayList<Imagen>  t_colimage=new ArrayList<>();
+        Iterator<Imagen> it= colimage.iterator();
+        while (it.hasNext()){            
+            Imagen ima =it.next();
+            BufferedImage bi = ima.getBi();
+            for (int i =0; i<bi.getWidth();i++){
+                for(int j=0;j<bi.getHeight();j++){  
+                    Color cl= new Color(bi.getRGB(i, j));
+                    int cpred = cl.getRed();
+                    int cpgreen = cl.getGreen();
+                    int cpblue = cl.getBlue();
+                    //sumamos 50 a cada componente
+                    int red = 50 + cl.getRed();
+                    int green = 50 + cl.getGreen();
+                    int blue = 50 + cl.getBlue();
+                    if(red>255){
+                        red = cpred;
+                    }
+                    if(green>255){
+                        green = cpgreen;
+                    }
+                    if(blue>255){
+                        blue = cpblue;
+                    }
+                    cl = new Color(red,green,blue);
+                    bi.setRGB(i,j,cl.getRGB() );
+                }
+            }
+            ima.setBi(bi);
+            t_colimage.add(ima);
+            
+        }
+        this.colimage=t_colimage;
+    }//GEN-LAST:event_RGBAdjust50ActionPerformed
 
     private int opcio() throws IOException{
         BufferedReader lectura = new BufferedReader(new InputStreamReader(System.in));
@@ -381,10 +485,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem InvertirColores;
+    private javax.swing.JMenuItem RGBAdjust50;
+    private javax.swing.JMenuItem Threshold;
     private javax.swing.JMenuItem closeButton;
     private javax.swing.JMenuItem closeVideoButton;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuFiltroGris;
