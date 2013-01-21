@@ -1,6 +1,8 @@
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -33,9 +35,10 @@ public class Codec {
         try {   
                 GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(path));
                 //ImageIO no entiende de separadores, por lo que los escribimos como objetos
-                ObjectOutputStream oos = new ObjectOutputStream(out);
+                BufferedOutputStream bos = new BufferedOutputStream(out);
+                ObjectOutputStream oos = new ObjectOutputStream(bos);
                
-                int tam_tesela=8;
+                int tam_tesela=4;
                 //para indicar cuantas imagenes vienen
                 oos.writeInt(colimage.size());
                 oos.writeBoolean(motion);
@@ -59,16 +62,21 @@ public class Codec {
                             ImageIO.write(bi, "jpeg", byteArray); 
                             oos.writeObject(byteArray.toByteArray());
                             byteArray.close();
-                        }else{
-                            System.out.println("frame: "+i);
+                            
+                        }else{                            
                             
                             int num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);                            
                             byte[] vm_x = new byte[num_teselas];
                             byte[] vm_y = new byte[num_teselas];
                             motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y);
                             
-                            oos.write(vm_x);
-                            oos.write(vm_y);
+                            
+                            oos.writeObject(vm_x);                            
+                            oos.writeObject(vm_y);
+                            
+                            
+                                
+                            
                             motionRef=bi;
                         }
                     }else{
@@ -80,6 +88,7 @@ public class Codec {
                     
                 }
                 oos.close();
+                bos.close();
                 out.close();
             } catch (IOException ex) {
                 Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,8 +100,9 @@ public class Codec {
             
             BufferedImage bi ;
             
-            GZIPInputStream in = new GZIPInputStream(new FileInputStream(path));                
-            ObjectInputStream ois = new ObjectInputStream(in); 
+            GZIPInputStream in = new GZIPInputStream(new FileInputStream(path));
+            BufferedInputStream bin= new BufferedInputStream(in);
+            ObjectInputStream ois = new ObjectInputStream(bin); 
             
             BufferedImage motionPrev=null;
             
@@ -106,7 +116,7 @@ public class Codec {
             
             byte[] aux ;
             for(int i = 0; i< numframes;i++){
-                System.out.println("pinto frame: "+i);
+               
                 if(motion){
                    if(i==0){
                         aux=(byte[])ois.readObject();
@@ -116,10 +126,9 @@ public class Codec {
                         motionPrev = bi;
                         num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);
                    }else{
-                       byte[] vm_x = new byte[num_teselas];
-                       byte[] vm_y = new byte[num_teselas];
-                       ois.read(vm_x, 0, num_teselas);
-                       ois.read(vm_y, 0, num_teselas);
+                       byte[] vm_x = (byte[])ois.readObject();
+                       byte[] vm_y = (byte[])ois.readObject();
+                       
                        bi = new BufferedImage(motionPrev.getWidth(),motionPrev.getHeight(),motionPrev.getType());
                        for (int j = 0; j<num_teselas;j++){
                             //inix e iniY de la tesela actual
@@ -128,16 +137,15 @@ public class Codec {
                             //recuperamos tesela de referencia
                             int iniXref = iniX + vm_x[j];
                             int iniYref = iniY + vm_y[j];
-                            System.out.println(" tes "+j+" iniX:"+iniX +"+ vm_x: "+ vm_x[j]);
-                            System.out.println(" tes iniY:"+iniY +"+ vm_y: "+ vm_y[j]);
-                            /*for(int k = 0; k< tam_tesela*tam_tesela;k++){
+                            
+                            for(int k = 0; k< tam_tesela*tam_tesela;k++){
                                 bi.setRGB(
                                         iniX + (k%tam_tesela), 
                                         iniY + ((int)Math.floor(k/tam_tesela)), 
                                   motionPrev.getRGB(iniXref +(k%tam_tesela), iniYref+((int)Math.floor(k/tam_tesela)))
                                         );
                                 
-                            }*/
+                            }
                             
                        }
                        motionPrev = bi;
@@ -163,6 +171,8 @@ public class Codec {
                 colimage.add(p);                    
                 
             }
+            ois.close();
+            bin.close();
             in.close(); 
         }  catch (ClassNotFoundException | IOException  ex) {
             Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -208,12 +218,12 @@ public class Codec {
     private static void motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y) {
         BufferedImage newbi;
         newbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
-        System.out.println("num teselas: "+num_teselas);
+        
         for (int i=0;i<num_teselas;i++){
             int iniX = (i%(bi.getWidth()/tam_tesela))*tam_tesela;
             int iniY = (int)Math.floor(i/(bi.getWidth()/tam_tesela))*tam_tesela;
             
-            //System.out.println("i: "+i+" iniX: "+iniX +" iniy: "+iniY);
+            
             int spiral_limit=20;
             int [] candidatos_diff;
             candidatos_diff = new int[spiral_limit];
@@ -254,7 +264,7 @@ public class Codec {
                 candidatosY[j] = spiralY;
                 
                 //codigo espiral
-                do{ //System.out.println(" spiralX"+spiralX +" spiralY: "+spiralY);
+                do{ 
                     //estamos en esquina izquierda inferior
                     if(spiralX<=0 && spiralY<=0 && spiralX==spiralY){
                         spiralX--;
@@ -298,10 +308,7 @@ public class Codec {
                 }    
             }
             vm_x[i] = (byte) candidatosX[pos];
-            vm_y[i] = (byte) candidatosY[pos];
-            
-            System.out.println("hola tesela: "+i+" vm_x: "+vm_x[i]);
-            System.out.println("hola tesela: "+i+" vm_y: "+vm_y[i]);
+            vm_y[i] = (byte) candidatosY[pos];           
 
             
         }

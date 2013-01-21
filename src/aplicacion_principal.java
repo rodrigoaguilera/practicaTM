@@ -19,7 +19,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     ArrayList<Imagen> colimage;
     Reproductor player;
     
-    boolean DEBUG = true;
+    boolean DEBUG = false;
     /**
      * Creates new form aplicacion_principal
      */
