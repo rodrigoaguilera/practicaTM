@@ -38,12 +38,16 @@ public class Codec {
                 BufferedOutputStream bos = new BufferedOutputStream(out);
                 ObjectOutputStream oos = new ObjectOutputStream(bos);
                
-                int tam_tesela=4;
+                int tam_tesela=8;
+                int intervalIframes=5;
+                int spiral_limit=90;
                 //para indicar cuantas imagenes vienen
                 oos.writeInt(colimage.size());
                 oos.writeBoolean(motion);
                 if (motion){
                     oos.writeInt(tam_tesela);
+                    oos.writeInt(intervalIframes);
+                    oos.writeInt(spiral_limit);
                 }
                 
                 BufferedImage motionRef=null;
@@ -55,7 +59,7 @@ public class Codec {
                     Imagen ima =it.next();
                     BufferedImage bi = ima.getBi();                    
                     if(motion){
-                        if(i==0){
+                        if(i%intervalIframes==0){
                             motionRef=bi;
                             
                             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
@@ -68,7 +72,7 @@ public class Codec {
                             int num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);                            
                             byte[] vm_x = new byte[num_teselas];
                             byte[] vm_y = new byte[num_teselas];
-                            motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y);
+                            motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y,spiral_limit);
                             
                             
                             oos.writeObject(vm_x);                            
@@ -109,8 +113,12 @@ public class Codec {
             int numframes=ois.readInt();
             boolean motion = ois.readBoolean();
             int tam_tesela=0;
+            int intervalIframes=0;
+            int spiral_limit=0;
             if (motion){
                tam_tesela=ois.readInt(); 
+               intervalIframes=ois.readInt();
+               spiral_limit=ois.readInt();
             }
             int num_teselas=0;
             
@@ -118,7 +126,7 @@ public class Codec {
             for(int i = 0; i< numframes;i++){
                
                 if(motion){
-                   if(i==0){
+                   if(i%intervalIframes==0){
                         aux=(byte[])ois.readObject();
                         ByteArrayInputStream ba = new ByteArrayInputStream(aux);
                         bi = ImageIO.read(ba);
@@ -215,7 +223,7 @@ public class Codec {
     }
 
 
-    private static void motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y) {
+    private static void motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y, int spiral_limit) {
         BufferedImage newbi;
         newbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
         
@@ -224,7 +232,7 @@ public class Codec {
             int iniY = (int)Math.floor(i/(bi.getWidth()/tam_tesela))*tam_tesela;
             
             
-            int spiral_limit=20;
+            
             int [] candidatos_diff;
             candidatos_diff = new int[spiral_limit];
             int[] candidatosX = new int[spiral_limit];
