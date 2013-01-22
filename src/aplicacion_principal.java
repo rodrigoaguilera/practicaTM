@@ -5,11 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.*;
-import java.lang.String;
-import java.io.File;
 
 /**
  *
@@ -421,8 +417,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     if(thres>=barrera){
                         thres = 255;
                     }
-                    else
+                    else{
                         thres = 0;
+                    }    
                     cl = new Color(thres,thres,thres);
                     bi.setRGB(i,j,cl.getRGB() );
                 }
