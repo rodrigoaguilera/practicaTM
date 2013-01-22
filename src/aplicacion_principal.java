@@ -48,6 +48,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jPanel_Dades = new javax.swing.JPanel();
         jRadioButton_Compression = new javax.swing.JRadioButton();
         jRadioButton_SINcompression = new javax.swing.JRadioButton();
+        jRadioButton_comparacion = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -108,6 +109,13 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton_comparacion.setText("TAMAÑO CON/SIN");
+        jRadioButton_comparacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_comparacionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_DadesLayout = new javax.swing.GroupLayout(jPanel_Dades);
         jPanel_Dades.setLayout(jPanel_DadesLayout);
         jPanel_DadesLayout.setHorizontalGroup(
@@ -115,7 +123,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGroup(jPanel_DadesLayout.createSequentialGroup()
                 .addGroup(jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButton_Compression)
-                    .addComponent(jRadioButton_SINcompression))
+                    .addComponent(jRadioButton_SINcompression)
+                    .addComponent(jRadioButton_comparacion))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel_DadesLayout.setVerticalGroup(
@@ -125,7 +134,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addComponent(jRadioButton_Compression)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton_SINcompression)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton_comparacion)
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         jLabel1.setText("Datos de Compresión");
@@ -489,11 +500,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
         JPanel panel=new JPanel();
         long startTimeC = System.nanoTime();
         Codec.savePTM("ficherotemporal.ptm",colimage,true);
-        long estimatedTimeC = System.nanoTime() - startTimeC;
+        long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporal.ptm");
         long tam = file.length();
-        JTextArea jt= new JTextArea("Tiempo comprimiendo: "+temps+ ".\nTamaño del archivo: "+tam,5,20);
+        JTextArea jt= new JTextArea("Tiempo comprimiendo(s): "+temps+ ".\nTamaño del archivo: "+tam,5,20);
         frame.add(panel);
         panel.add(jt);
         frame.setSize(300,100);
@@ -507,17 +518,33 @@ public class aplicacion_principal extends javax.swing.JFrame {
         JPanel panel=new JPanel();
         long startTimeC = System.nanoTime();
         Codec.savePTM("ficherotemporalsin.ptm",colimage,false);
-        long estimatedTimeC = System.nanoTime() - startTimeC;
+        long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporalsin.ptm");
         long tam = file.length();
-        JTextArea jt= new JTextArea("Tiempo sin comprimir: "+temps+ ".\nTamaño del archivo: "+tam,5,20);
+        JTextArea jt= new JTextArea("Tiempo sin comprimir(s): "+temps+ ".\nTamaño del archivo: "+tam,5,20);
         frame.add(panel);
         panel.add(jt);
         frame.setSize(300,100);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }//GEN-LAST:event_jRadioButton_SINcompressionActionPerformed
+
+    private void jRadioButton_comparacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_comparacionActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        JFrame frame= new JFrame("VIDEO SIN COMPRIMIR");
+        JPanel panel=new JPanel();
+        File files = new File("ficherotemporalsin.ptm");
+        File filec = new File("ficherotemporal.ptm");
+        long tamc = filec.length();
+        long tams = files.length();
+        JTextArea jt= new JTextArea("Tamaño del archivo CON: "+tamc+ ".\nTamaño del archivo SIN: "+tams,5,20);
+        frame.add(panel);
+        panel.add(jt);
+        frame.setSize(300,100);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }//GEN-LAST:event_jRadioButton_comparacionActionPerformed
 
     private int opcio() throws IOException{
         BufferedReader lectura = new BufferedReader(new InputStreamReader(System.in));
@@ -569,6 +596,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_Dades;
     private javax.swing.JRadioButton jRadioButton_Compression;
     private javax.swing.JRadioButton jRadioButton_SINcompression;
+    private javax.swing.JRadioButton jRadioButton_comparacion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu menuArchivo;
