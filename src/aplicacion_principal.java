@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.lang.String;
+import java.io.File;
 
 /**
  *
@@ -37,9 +40,15 @@ public class aplicacion_principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         playButton = new javax.swing.JButton();
         videoPanel = new javax.swing.JPanel();
         stopButton = new javax.swing.JButton();
+        jPanel_Dades = new javax.swing.JPanel();
+        jRadioButton_Compression = new javax.swing.JRadioButton();
+        jRadioButton_SINcompression = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         openZipButton = new javax.swing.JMenuItem();
@@ -52,6 +61,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
         Threshold = new javax.swing.JMenuItem();
         InvertirColores = new javax.swing.JMenuItem();
         RGBAdjust50 = new javax.swing.JMenuItem();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tecnologías multimedia");
@@ -80,6 +93,42 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 stopButtonActionPerformed(evt);
             }
         });
+
+        jRadioButton_Compression.setText("CON COMPRESION");
+        jRadioButton_Compression.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_CompressionActionPerformed(evt);
+            }
+        });
+
+        jRadioButton_SINcompression.setText("SIN COMPRESION");
+        jRadioButton_SINcompression.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_SINcompressionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel_DadesLayout = new javax.swing.GroupLayout(jPanel_Dades);
+        jPanel_Dades.setLayout(jPanel_DadesLayout);
+        jPanel_DadesLayout.setHorizontalGroup(
+            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_DadesLayout.createSequentialGroup()
+                .addGroup(jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton_Compression)
+                    .addComponent(jRadioButton_SINcompression))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel_DadesLayout.setVerticalGroup(
+            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_DadesLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jRadioButton_Compression)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton_SINcompression)
+                .addContainerGap(191, Short.MAX_VALUE))
+        );
+
+        jLabel1.setText("Datos de Compresión");
 
         menuArchivo.setText("Archivo");
 
@@ -172,23 +221,37 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel_Dades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(playButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton)))
-                .addContainerGap(151, Short.MAX_VALUE))
+                        .addComponent(stopButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel_Dades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playButton)
                     .addComponent(stopButton))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();
@@ -420,6 +483,42 @@ public class aplicacion_principal extends javax.swing.JFrame {
         this.colimage=t_colimage;
     }//GEN-LAST:event_RGBAdjust50ActionPerformed
 
+    private void jRadioButton_CompressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_CompressionActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        JFrame frame= new JFrame("VIDEO COMPRIMIDO");
+        JPanel panel=new JPanel();
+        long startTimeC = System.nanoTime();
+        Codec.savePTM("ficherotemporal.ptm",colimage,true);
+        long estimatedTimeC = System.nanoTime() - startTimeC;
+        String temps = String.valueOf(estimatedTimeC);
+        File file = new File("ficherotemporal.ptm");
+        long tam = file.length();
+        JTextArea jt= new JTextArea("Tiempo comprimiendo: "+temps+ ".\nTamaño del archivo: "+tam,5,20);
+        frame.add(panel);
+        panel.add(jt);
+        frame.setSize(300,100);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }//GEN-LAST:event_jRadioButton_CompressionActionPerformed
+
+    private void jRadioButton_SINcompressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_SINcompressionActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        JFrame frame= new JFrame("VIDEO SIN COMPRIMIR");
+        JPanel panel=new JPanel();
+        long startTimeC = System.nanoTime();
+        Codec.savePTM("ficherotemporalsin.ptm",colimage,false);
+        long estimatedTimeC = System.nanoTime() - startTimeC;
+        String temps = String.valueOf(estimatedTimeC);
+        File file = new File("ficherotemporalsin.ptm");
+        long tam = file.length();
+        JTextArea jt= new JTextArea("Tiempo sin comprimir: "+temps+ ".\nTamaño del archivo: "+tam,5,20);
+        frame.add(panel);
+        panel.add(jt);
+        frame.setSize(300,100);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }//GEN-LAST:event_jRadioButton_SINcompressionActionPerformed
+
     private int opcio() throws IOException{
         BufferedReader lectura = new BufferedReader(new InputStreamReader(System.in));
         String llegir;
@@ -465,7 +564,13 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem Threshold;
     private javax.swing.JMenuItem closeButton;
     private javax.swing.JMenuItem closeVideoButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JPanel jPanel_Dades;
+    private javax.swing.JRadioButton jRadioButton_Compression;
+    private javax.swing.JRadioButton jRadioButton_SINcompression;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuFiltroGris;
     private javax.swing.JMenuBar menuPrincipal;
