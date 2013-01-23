@@ -58,7 +58,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel_TituloFiltro = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -232,7 +232,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jSlider1.setPaintTicks(true);
         jSlider1.setValue(120);
 
-        jLabel5.setText("Valor para los filtros de imagen");
+        jLabel_TituloFiltro.setText("Valor para los filtros de imagen");
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider1, org.jdesktop.beansbinding.ELProperty.create("${value}"), jLabel6, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -339,7 +339,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel_TituloFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -364,7 +364,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(playButton)
                         .addComponent(stopButton))
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel_TituloFiltro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -532,7 +532,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 for(int j=0;j<bi.getHeight();j++){  
                     Color cl= new Color(bi.getRGB(i, j));
                     //pasamos el threshold. lo mas bajo lo mandamos a blanco y lo mas alto a negro
-                    barrera = 100;
                     int thres = (cl.getRed() + cl.getGreen() + cl.getBlue())/3;
                     if(thres>=barrera){
                         thres = 255;
@@ -712,8 +711,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel_TituloFiltro;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
