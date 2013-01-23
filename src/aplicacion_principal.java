@@ -35,6 +35,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -56,6 +57,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
         spiral_limitTextField = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         openZipButton = new javax.swing.JMenuItem();
@@ -176,7 +180,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Parametros compresión", jPanel1);
@@ -185,11 +189,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 390, Short.MAX_VALUE)
+            .addGap(0, 406, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 141, Short.MAX_VALUE)
+            .addGap(0, 130, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Análisis", jPanel2);
@@ -221,6 +225,17 @@ public class aplicacion_principal extends javax.swing.JFrame {
         );
 
         jLabel1.setText("Datos de Compresión");
+
+        jSlider1.setMajorTickSpacing(32);
+        jSlider1.setMaximum(255);
+        jSlider1.setMinorTickSpacing(32);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setValue(120);
+
+        jLabel5.setText("Valor para los filtros de imagen");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider1, org.jdesktop.beansbinding.ELProperty.create("${value}"), jLabel6, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         menuArchivo.setText("Archivo");
 
@@ -276,7 +291,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         });
         jMenu2.add(menuFiltroGris);
 
-        Threshold.setText("Threshold");
+        Threshold.setText("Threshold [V]");
         Threshold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ThresholdActionPerformed(evt);
@@ -293,7 +308,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         });
         jMenu2.add(InvertirColores);
 
-        RGBAdjust50.setText("RGB Ajuste +50");
+        RGBAdjust50.setText("RGB Ajuste [V]");
         RGBAdjust50.setAutoscrolls(true);
         RGBAdjust50.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -313,20 +328,25 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel_Dades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(playButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton)
+                        .addComponent(stopButton)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel_Dades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(308, 308, 308))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,12 +359,20 @@ public class aplicacion_principal extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel_Dades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(playButton)
-                    .addComponent(stopButton))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(playButton)
+                        .addComponent(stopButton))
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -496,6 +524,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private void ThresholdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThresholdActionPerformed
         ArrayList<Imagen>  t_colimage=new ArrayList<>();
         Iterator<Imagen> it= colimage.iterator();
+        int barrera = jSlider1.getValue();
         while (it.hasNext()){            
             Imagen ima =it.next();
             BufferedImage bi = ima.getBi();
@@ -503,7 +532,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 for(int j=0;j<bi.getHeight();j++){  
                     Color cl= new Color(bi.getRGB(i, j));
                     //pasamos el threshold. lo mas bajo lo mandamos a blanco y lo mas alto a negro
-                    int barrera = 100;
+                    barrera = 100;
                     int thres = (cl.getRed() + cl.getGreen() + cl.getBlue())/3;
                     if(thres>=barrera){
                         thres = 255;
@@ -549,6 +578,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private void RGBAdjust50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RGBAdjust50ActionPerformed
         ArrayList<Imagen>  t_colimage=new ArrayList<>();
         Iterator<Imagen> it= colimage.iterator();
+        int value = jSlider1.getValue();
         while (it.hasNext()){            
             Imagen ima =it.next();
             BufferedImage bi = ima.getBi();
@@ -559,9 +589,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     int cpgreen = cl.getGreen();
                     int cpblue = cl.getBlue();
                     //sumamos 50 a cada componente
-                    int red = 50 + cl.getRed();
-                    int green = 50 + cl.getGreen();
-                    int blue = 50 + cl.getBlue();
+                    int red = value + cl.getRed();
+                    int green = value + cl.getGreen();
+                    int blue = value + cl.getBlue();
                     if(red>255){
                         red = cpred;
                     }
@@ -682,6 +712,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -690,6 +722,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton_SINcompression;
     private javax.swing.JRadioButton jRadioButton_comparacion;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu menuArchivo;
@@ -704,6 +737,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JButton stopButton;
     private javax.swing.JTextField tam_teselaTextField;
     private javax.swing.JPanel videoPanel;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
 //private void inicializar() {   }
