@@ -45,6 +45,16 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jRadioButton_Compression = new javax.swing.JRadioButton();
         jRadioButton_SINcompression = new javax.swing.JRadioButton();
         jRadioButton_comparacion = new javax.swing.JRadioButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        tam_teselaTextField = new javax.swing.JTextField();
+        motionCheck = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        intervalFramesTextfield = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        spiral_limitTextField = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -112,6 +122,78 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Tamaño tesela");
+
+        tam_teselaTextField.setText("8");
+
+        motionCheck.setSelected(true);
+        motionCheck.setText("compensacion de movimiento");
+
+        jLabel3.setText("Intervalo Keyframes");
+
+        intervalFramesTextfield.setText("10");
+
+        jLabel4.setText("Límite pixeles de busqueda en espiral");
+
+        spiral_limitTextField.setText("100");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tam_teselaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(motionCheck))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(4, 4, 4)
+                        .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tam_teselaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(motionCheck))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(60, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Parametros compresión", jPanel1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 390, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 141, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Análisis", jPanel2);
+
         javax.swing.GroupLayout jPanel_DadesLayout = new javax.swing.GroupLayout(jPanel_Dades);
         jPanel_Dades.setLayout(jPanel_DadesLayout);
         jPanel_DadesLayout.setHorizontalGroup(
@@ -122,6 +204,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addComponent(jRadioButton_SINcompression)
                     .addComponent(jRadioButton_comparacion))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1)
         );
         jPanel_DadesLayout.setVerticalGroup(
             jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,7 +215,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addComponent(jRadioButton_SINcompression)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton_comparacion)
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel1.setText("Datos de Compresión");
@@ -258,7 +343,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playButton)
                     .addComponent(stopButton))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         pack();
@@ -363,7 +448,13 @@ public class aplicacion_principal extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(menuArchivo);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);
+            Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),
+                    colimage,
+                    motionCheck.isSelected(),
+                    Integer.parseInt(tam_teselaTextField.getText()),
+                    Integer.parseInt(intervalFramesTextfield.getText()),
+                    Integer.parseInt(spiral_limitTextField.getText())
+                    );
             /*
             try {
                 int opt = opcio();
@@ -496,7 +587,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         JFrame frame= new JFrame("VIDEO COMPRIMIDO");
         JPanel panel=new JPanel();
         long startTimeC = System.nanoTime();
-        Codec.savePTM("ficherotemporal.ptm",colimage,true);
+        //Codec.savePTM("ficherotemporal.ptm",colimage,true);
         long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporal.ptm");
@@ -513,7 +604,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         JFrame frame= new JFrame("VIDEO SIN COMPRIMIR");
         JPanel panel=new JPanel();
         long startTimeC = System.nanoTime();
-        Codec.savePTM("ficherotemporalsin.ptm",colimage,false);
+        //Codec.savePTM("ficherotemporalsin.ptm",colimage,false);
         long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporalsin.ptm");
@@ -586,22 +677,32 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem Threshold;
     private javax.swing.JMenuItem closeButton;
     private javax.swing.JMenuItem closeVideoButton;
+    private javax.swing.JTextField intervalFramesTextfield;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_Dades;
     private javax.swing.JRadioButton jRadioButton_Compression;
     private javax.swing.JRadioButton jRadioButton_SINcompression;
     private javax.swing.JRadioButton jRadioButton_comparacion;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuFiltroGris;
     private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JCheckBox motionCheck;
     private javax.swing.JMenuItem openPtmButton;
     private javax.swing.JMenuItem openZipButton;
     private javax.swing.JButton playButton;
     private javax.swing.JMenuItem savePtmButton;
+    private javax.swing.JTextField spiral_limitTextField;
     private javax.swing.JButton stopButton;
+    private javax.swing.JTextField tam_teselaTextField;
     private javax.swing.JPanel videoPanel;
     // End of variables declaration//GEN-END:variables
 

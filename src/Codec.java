@@ -31,16 +31,16 @@ import javax.imageio.ImageIO;
 public class Codec {
     
     
-    public static void savePTM(String path,ArrayList<Imagen> colimage, boolean motion){
+    public static void savePTM(String path,ArrayList<Imagen> colimage, 
+            boolean motion, int tam_tesela,int intervalIframes,int spiral_limit){
         try {   
+                System.out.println("motion:"+motion+"tam_tese:"+tam_tesela+"inter:"+intervalIframes+"spi:"+spiral_limit);
                 GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(path));
                 //ImageIO no entiende de separadores, por lo que los escribimos como objetos
                 BufferedOutputStream bos = new BufferedOutputStream(out);
                 ObjectOutputStream oos = new ObjectOutputStream(bos);
                
-                int tam_tesela=8;
-                int intervalIframes=5;
-                int spiral_limit=90;
+               
                 //para indicar cuantas imagenes vienen
                 oos.writeInt(colimage.size());
                 oos.writeBoolean(motion);

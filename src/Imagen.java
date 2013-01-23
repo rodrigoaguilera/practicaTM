@@ -1,22 +1,9 @@
-
-
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-
-/*
- * 
- * gzipoutputstream
- *  para comparar el grado de compresion hay que saltarse el proceso de compresion
- * es decir, saltarse la compresion y pillar la coleection y aplicar jpeg+gzip
- * 
- * para la funcion hash que compara teselas, por ejemplo vale la suma de los valores
- *rgb y dividir por el numero de pixeles
- * 
- * /
 
 /**
  *
  * @author Rodrigo Aguilera
+ * @author Ernest Pastor
  */
 public class Imagen implements Comparable{
     private BufferedImage bi;
@@ -56,9 +43,8 @@ public class Imagen implements Comparable{
     }
     
     /**
-     * @return the ancho
+     * Implementa esta funcion para poder ser un objeto ordenable
      */
-   
     @Override
     public int compareTo(Object t) {
        Imagen im = (Imagen) t; 
