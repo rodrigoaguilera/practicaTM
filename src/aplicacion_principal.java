@@ -506,7 +506,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
         panel.add(jt);
         frame.setSize(300,100);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }//GEN-LAST:event_jRadioButton_CompressionActionPerformed
 
     private void jRadioButton_SINcompressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_SINcompressionActionPerformed
@@ -522,25 +521,24 @@ public class aplicacion_principal extends javax.swing.JFrame {
         JTextArea jt= new JTextArea("Tiempo sin comprimir(s): "+temps+ ".\nTamaño del archivo: "+tam,5,20);
         frame.add(panel);
         panel.add(jt);
-        frame.setSize(300,100);
+        frame.setSize(400,100);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }//GEN-LAST:event_jRadioButton_SINcompressionActionPerformed
 
     private void jRadioButton_comparacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_comparacionActionPerformed
         final JFileChooser fc = new JFileChooser();
-        JFrame frame= new JFrame("VIDEO SIN COMPRIMIR");
+        JFrame frame= new JFrame("COMPARACION COMPRESION / SIN");
         JPanel panel=new JPanel();
         File files = new File("ficherotemporalsin.ptm");
         File filec = new File("ficherotemporal.ptm");
-        long tamc = filec.length();
-        long tams = files.length();
-        JTextArea jt= new JTextArea("Tamaño del archivo CON: "+tamc+ ".\nTamaño del archivo SIN: "+tams,5,20);
+        float tamc = filec.length();
+        float tams = files.length();
+        float tamT = (tamc / tams)*100 ;
+        JTextArea jt= new JTextArea("Tamaño del archivo CON: "+tamc+ ".\nTamaño del archivo SIN: "+tams+"\nCompresion(%): "+tamT,5,20);
         frame.add(panel);
         panel.add(jt);
-        frame.setSize(300,100);
+        frame.setSize(400,150);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }//GEN-LAST:event_jRadioButton_comparacionActionPerformed
 
     private int opcio() throws IOException{
