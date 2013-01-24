@@ -43,9 +43,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
         videoPanel = new javax.swing.JPanel();
         stopButton = new javax.swing.JButton();
         jPanel_Dades = new javax.swing.JPanel();
-        jRadioButton_Compression = new javax.swing.JRadioButton();
-        jRadioButton_SINcompression = new javax.swing.JRadioButton();
-        jRadioButton_comparacion = new javax.swing.JRadioButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -59,6 +56,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
         dynamicIntervalValue = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jRadioButton_Compression = new javax.swing.JRadioButton();
+        jRadioButton_SINcompression = new javax.swing.JRadioButton();
+        jRadioButton_comparacion = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
         jSlider1 = new javax.swing.JSlider();
         jLabel_TituloFiltro = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -107,27 +108,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
             }
         });
 
-        jRadioButton_Compression.setText("CON COMPRESION");
-        jRadioButton_Compression.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_CompressionActionPerformed(evt);
-            }
-        });
-
-        jRadioButton_SINcompression.setText("SIN COMPRESION");
-        jRadioButton_SINcompression.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_SINcompressionActionPerformed(evt);
-            }
-        });
-
-        jRadioButton_comparacion.setText("TAMAÑO CON/SIN");
-        jRadioButton_comparacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_comparacionActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Tamaño tesela");
 
         tam_teselaTextField.setText("8");
@@ -172,7 +152,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,51 +172,63 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Parametros compresión", jPanel1);
+
+        jLabel1.setText("Datos de Compresión");
+
+        jRadioButton_Compression.setText("CON COMPRESION");
+        jRadioButton_Compression.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_CompressionActionPerformed(evt);
+            }
+        });
+
+        jRadioButton_SINcompression.setText("SIN COMPRESION");
+        jRadioButton_SINcompression.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_SINcompressionActionPerformed(evt);
+            }
+        });
+
+        jRadioButton_comparacion.setText("TAMAÑO CON/SIN");
+        jRadioButton_comparacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton_comparacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jRadioButton_SINcompression)
+                        .addComponent(jRadioButton_Compression)
+                        .addComponent(jRadioButton_comparacion)))
+                .addContainerGap(372, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 141, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Análisis", jPanel2);
-
-        javax.swing.GroupLayout jPanel_DadesLayout = new javax.swing.GroupLayout(jPanel_Dades);
-        jPanel_Dades.setLayout(jPanel_DadesLayout);
-        jPanel_DadesLayout.setHorizontalGroup(
-            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_DadesLayout.createSequentialGroup()
-                .addGroup(jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton_Compression)
-                    .addComponent(jRadioButton_SINcompression)
-                    .addComponent(jRadioButton_comparacion))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jTabbedPane1)
-        );
-        jPanel_DadesLayout.setVerticalGroup(
-            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_DadesLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton_Compression)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton_SINcompression)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton_comparacion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(171, Short.MAX_VALUE))
         );
 
-        jLabel1.setText("Datos de Compresión");
+        jTabbedPane1.addTab("Análisis", jPanel2);
 
         jSlider1.setMajorTickSpacing(32);
         jSlider1.setMaximum(255);
@@ -244,10 +236,56 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jSlider1.setPaintTicks(true);
         jSlider1.setValue(120);
 
-        jLabel_TituloFiltro.setText("Valor para los filtros de imagen");
+        jLabel_TituloFiltro.setText("Valor para los filtros de imagen (para filtros con [V])");
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider1, org.jdesktop.beansbinding.ELProperty.create("${value}"), jLabel6, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel_TituloFiltro))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(156, 156, 156))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(135, 135, 135)
+                .addComponent(jLabel6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel_TituloFiltro)
+                .addGap(27, 27, 27)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addContainerGap(173, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Filtros", jPanel3);
+
+        javax.swing.GroupLayout jPanel_DadesLayout = new javax.swing.GroupLayout(jPanel_Dades);
+        jPanel_Dades.setLayout(jPanel_DadesLayout);
+        jPanel_DadesLayout.setHorizontalGroup(
+            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
+        );
+        jPanel_DadesLayout.setVerticalGroup(
+            jPanel_DadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_DadesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
+        );
 
         menuArchivo.setText("Archivo");
 
@@ -293,9 +331,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
         menuPrincipal.add(menuArchivo);
 
-        jMenu2.setText("Editar");
+        jMenu2.setText("Filtros");
 
-        menuFiltroGris.setText("Aplicar escala de grises");
+        menuFiltroGris.setText("Escala de grises");
         menuFiltroGris.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuFiltroGrisActionPerformed(evt);
@@ -303,7 +341,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         });
         jMenu2.add(menuFiltroGris);
 
-        Threshold.setText("Threshold [V]");
+        Threshold.setText("Blanco y negro(threshold) [V]");
         Threshold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ThresholdActionPerformed(evt);
@@ -320,7 +358,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         });
         jMenu2.add(InvertirColores);
 
-        RGBAdjust50.setText("RGB Ajuste [V]");
+        RGBAdjust50.setText(" Ajustar canales RGB [V]");
         RGBAdjust50.setAutoscrolls(true);
         RGBAdjust50.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -346,19 +384,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stopButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel_Dades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel_TituloFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel_Dades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(308, 308, 308))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -367,21 +394,13 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(videoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(31, 31, 31)
                         .addComponent(jPanel_Dades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(playButton)
-                        .addComponent(stopButton))
-                    .addComponent(jLabel_TituloFiltro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(playButton)
+                    .addComponent(stopButton))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -452,13 +471,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
             BufferedImage bi = ima.getBi();
             for (int i =0; i<bi.getWidth();i++){
                 for(int j=0;j<bi.getHeight();j++){  
-                    //System.out.println(ima.getFilename()+" : "+bi.getRGB(i,j));
                     Color cl= new Color(bi.getRGB(i, j));
                     //hacemos la media de los colores
                     int grey = (cl.getRed() + cl.getGreen() + cl.getBlue())/3;
                     cl = new Color(grey,grey,grey);
                     bi.setRGB(i,j,cl.getRGB() );
-                    //bi.setRGB(0, 0, 0);
                 }
             }
             ima.setBi(bi);
@@ -654,14 +671,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
         frame.setVisible(true);
     }//GEN-LAST:event_jRadioButton_comparacionActionPerformed
 
-    private int opcio() throws IOException{
-        BufferedReader lectura = new BufferedReader(new InputStreamReader(System.in));
-        String llegir;
-        System.out.println("Pulsa 1 para guardar -> CON compresion, Otro numero -> SIN compresion");
-        llegir = lectura.readLine();
-        int opcio = Integer.parseInt(llegir);
-        return opcio;
-    }
+    
     
        /**
      * @param args the command line arguments
@@ -711,6 +721,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel_Dades;
     private javax.swing.JRadioButton jRadioButton_Compression;
     private javax.swing.JRadioButton jRadioButton_SINcompression;

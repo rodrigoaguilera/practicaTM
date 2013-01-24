@@ -47,7 +47,7 @@ public class Reproductor extends JComponent {
     
     while (isNoStopRequested()) {
       try {
-        Thread.sleep(40); // 25 frames per second
+        Thread.sleep(40); //40 = 25 frames por segundo
         actual = (actual + 1) % getVideo().length;
         repaint();
       } catch (InterruptedException x) {
