@@ -55,6 +55,8 @@ public class aplicacion_principal extends javax.swing.JFrame {
         intervalFramesTextfield = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         spiral_limitTextField = new javax.swing.JTextField();
+        DynamicCheckbox = new javax.swing.JCheckBox();
+        dynamicIntervalValue = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
@@ -141,6 +143,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
         spiral_limitTextField.setText("100");
 
+        DynamicCheckbox.setText("Intervalo dinamico");
+
+        dynamicIntervalValue.setText("1000");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -157,12 +163,16 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(4, 4, 4)
-                        .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DynamicCheckbox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dynamicIntervalValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,12 +185,14 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(intervalFramesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DynamicCheckbox)
+                    .addComponent(dynamicIntervalValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Parametros compresión", jPanel1);
@@ -189,11 +201,11 @@ public class aplicacion_principal extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 130, Short.MAX_VALUE)
+            .addGap(0, 141, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Análisis", jPanel2);
@@ -481,29 +493,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
                     motionCheck.isSelected(),
                     Integer.parseInt(tam_teselaTextField.getText()),
                     Integer.parseInt(intervalFramesTextfield.getText()),
+                    DynamicCheckbox.isSelected(),
+                    Integer.parseInt(dynamicIntervalValue.getText()),
                     Integer.parseInt(spiral_limitTextField.getText())
-                    );
-            /*
-            try {
-                int opt = opcio();
-                if(opt==1){
-                    System.out.println("Guardamos en formato PTM CON compresion");
-                    long startTimeC = System.nanoTime();
-                    Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,true);
-                    long estimatedTimeC = System.nanoTime() - startTimeC;
-                    System.out.println("Tiempo guardando CON compresion: "+estimatedTimeC);
-                }
-                else{
-                    long startTimeD = System.nanoTime();
-                    System.out.println("Guardamos en formato PTM SIN compresion");
-                    Codec.savePTM(fc.getSelectedFile().getAbsolutePath(),colimage,false);
-                    long estimatedTimeD = System.nanoTime() - startTimeD;
-                    System.out.println("Tiempo guardando SIN compresion: "+estimatedTimeD);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(aplicacion_principal.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-                              
+                    );        
         } 
 
 
@@ -701,11 +694,13 @@ public class aplicacion_principal extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox DynamicCheckbox;
     private javax.swing.JMenuItem InvertirColores;
     private javax.swing.JMenuItem RGBAdjust50;
     private javax.swing.JMenuItem Threshold;
     private javax.swing.JMenuItem closeButton;
     private javax.swing.JMenuItem closeVideoButton;
+    private javax.swing.JTextField dynamicIntervalValue;
     private javax.swing.JTextField intervalFramesTextfield;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

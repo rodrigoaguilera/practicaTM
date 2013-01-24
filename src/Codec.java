@@ -32,9 +32,10 @@ public class Codec {
     
     
     public static void savePTM(String path,ArrayList<Imagen> colimage, 
-            boolean motion, int tam_tesela,int intervalIframes,int spiral_limit){
+            boolean motion, int tam_tesela,int intervalIframes,boolean dynamicInterval, int dynamicIntervalValue,
+            int spiral_limit){
         try {   
-                System.out.println("motion:"+motion+"tam_tese:"+tam_tesela+"inter:"+intervalIframes+"spi:"+spiral_limit);
+                
                 GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(path));
                 //ImageIO no entiende de separadores, por lo que los escribimos como objetos
                 BufferedOutputStream bos = new BufferedOutputStream(out);
@@ -45,22 +46,28 @@ public class Codec {
                 oos.writeInt(colimage.size());
                 oos.writeBoolean(motion);
                 if (motion){
-                    oos.writeInt(tam_tesela);
-                    oos.writeInt(intervalIframes);
-                    oos.writeInt(spiral_limit);
+                    oos.writeInt(tam_tesela);                    
                 }
                 
                 BufferedImage motionRef=null;
-
-
+                if (dynamicInterval){
+                    intervalIframes=10000000;
+                }else{
+                    dynamicIntervalValue = 10000000;
+                }
                 
+                System.out.println("motion:"+motion+"tam_tese:"+tam_tesela+"inter:"+intervalIframes+"spi:"+spiral_limit+"dina:"+dynamicInterval);
                 Iterator<Imagen> it= colimage.iterator();
-                for (int i=0;it.hasNext();i++){            
+                int accumulatedDiff=0;
+                for (int i=0;it.hasNext();i++){  
+                    System.out.println("-----------accu"+accumulatedDiff);
                     Imagen ima =it.next();
                     BufferedImage bi = ima.getBi();                    
                     if(motion){
-                        if(i%intervalIframes==0){
+                        if(i%intervalIframes==0 || accumulatedDiff>dynamicIntervalValue){
+                            accumulatedDiff=0;
                             motionRef=bi;
+                            oos.writeBoolean(true);
                             
                             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                             ImageIO.write(bi, "jpeg", byteArray); 
@@ -68,19 +75,16 @@ public class Codec {
                             byteArray.close();
                             
                         }else{                            
-                            
+                            oos.writeBoolean(false);
                             int num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);                            
                             byte[] vm_x = new byte[num_teselas];
                             byte[] vm_y = new byte[num_teselas];
-                            motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y,spiral_limit);
+                            accumulatedDiff += motionEstim(bi,motionRef,tam_tesela,num_teselas,vm_x,vm_y,spiral_limit);
+                            //escribimos los vectores de movimiento
+                            oos.writeObject(vm_x); 
+                            oos.writeObject(vm_y); 
                             
-                            
-                            oos.writeObject(vm_x);                            
-                            oos.writeObject(vm_y);
-                            
-                            
-                                
-                            
+                            // la imagen actuala será nuestra nueva referencia
                             motionRef=bi;
                         }
                     }else{
@@ -113,12 +117,9 @@ public class Codec {
             int numframes=ois.readInt();
             boolean motion = ois.readBoolean();
             int tam_tesela=0;
-            int intervalIframes=0;
-            int spiral_limit=0;
+            
             if (motion){
-               tam_tesela=ois.readInt(); 
-               intervalIframes=ois.readInt();
-               spiral_limit=ois.readInt();
+               tam_tesela=ois.readInt();                
             }
             int num_teselas=0;
             
@@ -126,7 +127,9 @@ public class Codec {
             for(int i = 0; i< numframes;i++){
                
                 if(motion){
-                   if(i%intervalIframes==0){
+                   boolean keyframe = ois.readBoolean();
+                   System.out.println(keyframe);
+                   if(keyframe){
                         aux=(byte[])ois.readObject();
                         ByteArrayInputStream ba = new ByteArrayInputStream(aux);
                         bi = ImageIO.read(ba);
@@ -134,6 +137,7 @@ public class Codec {
                         motionPrev = bi;
                         num_teselas = (bi.getWidth()/tam_tesela) * (bi.getHeight()/ tam_tesela);
                    }else{
+                       
                        byte[] vm_x = (byte[])ois.readObject();
                        byte[] vm_y = (byte[])ois.readObject();
                        
@@ -223,10 +227,10 @@ public class Codec {
     }
 
 
-    private static void motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y, int spiral_limit) {
+    private static int motionEstim(BufferedImage bi, BufferedImage motionPrev, int tam_tesela, int num_teselas, byte[] vm_x, byte[] vm_y, int spiral_limit) {
         BufferedImage newbi;
         newbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
-        
+        int accumulatedDiff=0;
         for (int i=0;i<num_teselas;i++){
             int iniX = (i%(bi.getWidth()/tam_tesela))*tam_tesela;
             int iniY = (int)Math.floor(i/(bi.getWidth()/tam_tesela))*tam_tesela;
@@ -310,16 +314,19 @@ public class Codec {
             }
             //devolver posicion del menor candidato
             int pos=0;
-            for(int j = 1;j <candidatos_diff.length; j++){
+            for(int j = 1;j <candidatos_diff.length && candidatos_diff[pos]>1; j++){
                 if(candidatos_diff[j]<candidatos_diff[pos]){
                     pos=j;
                 }    
             }
+            //System.out.println("diff: "+candidatos_diff[pos]);
+            accumulatedDiff+=Math.floor(candidatos_diff[pos]/num_teselas);
             vm_x[i] = (byte) candidatosX[pos];
             vm_y[i] = (byte) candidatosY[pos];           
 
             
         }
+        return accumulatedDiff;
     }
 
     
