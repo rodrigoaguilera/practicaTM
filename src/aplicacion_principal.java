@@ -56,9 +56,10 @@ public class aplicacion_principal extends javax.swing.JFrame {
         dynamicIntervalValue = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton_Compression = new javax.swing.JRadioButton();
-        jRadioButton_SINcompression = new javax.swing.JRadioButton();
-        jRadioButton_comparacion = new javax.swing.JRadioButton();
+        resultadosAnalisis = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jSlider1 = new javax.swing.JSlider();
         jLabel_TituloFiltro = new javax.swing.JLabel();
@@ -152,7 +153,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spiral_limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(368, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,26 +178,26 @@ public class aplicacion_principal extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Parametros compresión", jPanel1);
 
-        jLabel1.setText("Datos de Compresión");
+        jLabel1.setText("Datos de Compresión (abre un zip primero)");
 
-        jRadioButton_Compression.setText("CON COMPRESION");
-        jRadioButton_Compression.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("paso 1 . compresion");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_CompressionActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
-        jRadioButton_SINcompression.setText("SIN COMPRESION");
-        jRadioButton_SINcompression.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.setText("paso 2. sin compresion");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_SINcompressionActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
-        jRadioButton_comparacion.setText("TAMAÑO CON/SIN");
-        jRadioButton_comparacion.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("paso 3. comparacion");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton_comparacionActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -206,13 +207,20 @@ public class aplicacion_principal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jRadioButton_SINcompression)
-                        .addComponent(jRadioButton_Compression)
-                        .addComponent(jRadioButton_comparacion)))
-                .addContainerGap(372, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(resultadosAnalisis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 36, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(397, 397, 397))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jButton3)
+                            .addComponent(jButton2))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,12 +228,14 @@ public class aplicacion_principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton_Compression)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton_SINcompression)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton_comparacion)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addGap(19, 19, 19)
+                .addComponent(jButton3)
+                .addGap(25, 25, 25)
+                .addComponent(resultadosAnalisis, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Análisis", jPanel2);
@@ -248,7 +258,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(226, Short.MAX_VALUE)
                         .addComponent(jLabel_TituloFiltro))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
@@ -621,55 +631,54 @@ public class aplicacion_principal extends javax.swing.JFrame {
         this.colimage=t_colimage;
     }//GEN-LAST:event_RGBAdjust50ActionPerformed
 
-    private void jRadioButton_CompressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_CompressionActionPerformed
-        final JFileChooser fc = new JFileChooser();
-        JFrame frame= new JFrame("VIDEO COMPRIMIDO");
-        JPanel panel=new JPanel();
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
         long startTimeC = System.nanoTime();
-        //Codec.savePTM("ficherotemporal.ptm",colimage,true);
+        Codec.savePTM("ficherotemporal.ptm",
+                    colimage,
+                    true,
+                    Integer.parseInt(tam_teselaTextField.getText()),
+                    Integer.parseInt(intervalFramesTextfield.getText()),
+                    DynamicCheckbox.isSelected(),
+                    Integer.parseInt(dynamicIntervalValue.getText()),
+                    Integer.parseInt(spiral_limitTextField.getText())
+                    );        
         long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporal.ptm");
         long tam = file.length();
-        JTextArea jt= new JTextArea("Tiempo comprimiendo(s): "+temps+ ".\nTamaño del archivo: "+tam,5,20);
-        frame.add(panel);
-        panel.add(jt);
-        frame.setSize(300,100);
-        frame.setVisible(true);
-    }//GEN-LAST:event_jRadioButton_CompressionActionPerformed
+        resultadosAnalisis.setText("Tiempo comprimiendo(s): "+temps+ ".  \nTamaño del archivo: "+tam);
+      
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jRadioButton_SINcompressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_SINcompressionActionPerformed
-        final JFileChooser fc = new JFileChooser();
-        JFrame frame= new JFrame("VIDEO SIN COMPRIMIR");
-        JPanel panel=new JPanel();
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         long startTimeC = System.nanoTime();
-        //Codec.savePTM("ficherotemporalsin.ptm",colimage,false);
+        Codec.savePTM("ficherotemporalsin.ptm",
+                    colimage,
+                    false,
+                    Integer.parseInt(tam_teselaTextField.getText()),
+                    Integer.parseInt(intervalFramesTextfield.getText()),
+                    DynamicCheckbox.isSelected(),
+                    Integer.parseInt(dynamicIntervalValue.getText()),
+                    Integer.parseInt(spiral_limitTextField.getText())
+                    );        
         long estimatedTimeC = (System.nanoTime() - startTimeC)/1000000000;
         String temps = String.valueOf(estimatedTimeC);
         File file = new File("ficherotemporalsin.ptm");
         long tam = file.length();
-        JTextArea jt= new JTextArea("Tiempo sin comprimir(s): "+temps+ ".\nTamaño del archivo: "+tam,5,20);
-        frame.add(panel);
-        panel.add(jt);
-        frame.setSize(400,100);
-        frame.setVisible(true);
-    }//GEN-LAST:event_jRadioButton_SINcompressionActionPerformed
+        resultadosAnalisis.setText("Tiempo sin comprimir(s): "+temps+ ".  \r\nTamaño del archivo: "+tam);
+      
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jRadioButton_comparacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_comparacionActionPerformed
-        final JFileChooser fc = new JFileChooser();
-        JFrame frame= new JFrame("COMPARACION COMPRESION / SIN");
-        JPanel panel=new JPanel();
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         File files = new File("ficherotemporalsin.ptm");
         File filec = new File("ficherotemporal.ptm");
         float tamc = filec.length();
         float tams = files.length();
         float tamT = (tamc / tams)*100 ;
-        JTextArea jt= new JTextArea("Tamaño del archivo CON: "+tamc+ ".\nTamaño del archivo SIN: "+tams+"\nCompresion(%): "+tamT,5,20);
-        frame.add(panel);
-        panel.add(jt);
-        frame.setSize(400,150);
-        frame.setVisible(true);
-    }//GEN-LAST:event_jRadioButton_comparacionActionPerformed
+        resultadosAnalisis.setText("Tamaño del archivo CON: "+tamc+ ".\n  Tamaño del archivo SIN: "+tams+"\nCompresion(%): "+tamT);
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     
     
@@ -712,6 +721,9 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem closeVideoButton;
     private javax.swing.JTextField dynamicIntervalValue;
     private javax.swing.JTextField intervalFramesTextfield;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -723,9 +735,6 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel_Dades;
-    private javax.swing.JRadioButton jRadioButton_Compression;
-    private javax.swing.JRadioButton jRadioButton_SINcompression;
-    private javax.swing.JRadioButton jRadioButton_comparacion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -737,6 +746,7 @@ public class aplicacion_principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem openPtmButton;
     private javax.swing.JMenuItem openZipButton;
     private javax.swing.JButton playButton;
+    private javax.swing.JLabel resultadosAnalisis;
     private javax.swing.JMenuItem savePtmButton;
     private javax.swing.JTextField spiral_limitTextField;
     private javax.swing.JButton stopButton;
